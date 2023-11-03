@@ -1,0 +1,10 @@
+{
+  "name": "behaviors_borecky_jan",
+  "trees": [
+    "first_behavior.bt"
+  ],
+  "initScripts": [],
+  "parameters": {},
+  "capabilities": {},
+  "dynamicTargets": []
+}
