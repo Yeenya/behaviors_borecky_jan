@@ -1,17 +1,68 @@
 {
-  "name": "Wait Forever",
-  "id": "29f93fbb-759a-40d1-aeff-4708b228cbb7",
-  "type": "waitForever",
+  "name": "<unnamed>",
+  "id": "5c5efe22-c413-4391-ab86-af5437a1b411",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "<unnamed>",
+      "id": "f08603ee-621f-4f5f-bbdb-acb29a8720a4",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Group Position",
+          "id": "351367d8-9b9d-4ec8-96ac-db1184dce389",
+          "type": "scriptAction",
+          "script": [
+            "loc.soldierPosition = self:GetEntity(0):GetPosition()"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "bb8e9ecb-3422-4ba8-9265-8d14f75e3280",
+          "type": "loopForever",
+          "name": "<unnamed>"
+        }
+      ]
+    },
+    {
+      "name": "Debug",
+      "id": "fd84d83d-14a4-4d2a-a6ea-01f3acc4c540",
+      "type": "scriptAction",
+      "script": [
+        "DebugLine(",
+        "    loc.soldierPosition, ",
+        "    loc.soldierPosition + Vec3(0,0,4), ",
+        "    1, 0, 0, 0 ",
+        ")"
+      ]
+    }
+  ],
   "meta": {
     "nodesInfo": [
       {
-        "id": "29f93fbb-759a-40d1-aeff-4708b228cbb7",
-        "position": "1737.5,212.5"
+        "id": "5c5efe22-c413-4391-ab86-af5437a1b411",
+        "position": "1862.5,73.9842424242425"
+      },
+      {
+        "id": "f08603ee-621f-4f5f-bbdb-acb29a8720a4",
+        "position": "1862.5,298.984242424243"
+      },
+      {
+        "id": "351367d8-9b9d-4ec8-96ac-db1184dce389",
+        "position": "1862.5,473.984242424243"
+      },
+      {
+        "id": "fd84d83d-14a4-4d2a-a6ea-01f3acc4c540",
+        "position": "2137.5,198.984242424242"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2400"
+    "canvasSize": "3840,2573.98424242425",
+    "gridPadding": "0,11.4842424242425"
   },
   "parameters": [],
-  "locals": {}
+  "locals": {
+    "soldierPosition": "return nil"
+  }
 }

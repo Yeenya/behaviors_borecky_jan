@@ -84,7 +84,7 @@ class CfgAvailableBehaviors
 		
 		class RootBehaviors
 		{
-			group[] = {"generic_behaviors_public", "genericRoot"};
+			group[] = {"behaviors_borecky_jan", "first_behavior"};
 			entity[] = {"generic_behaviors_public", "genericRoot"};
 		};
 		
