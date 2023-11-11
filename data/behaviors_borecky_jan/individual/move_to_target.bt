@@ -1,0 +1,101 @@
+{
+  "name": "Move To Position Or Idle",
+  "id": "c02fb5a7-d87d-476a-aa81-8e2c2437a33f",
+  "type": "selector",
+  "subtrees": [
+    {
+      "name": "Move Sequence",
+      "id": "e8fcad51-804c-4a4d-87d5-59c1efd0d995",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Set Speed",
+          "id": "5a071a0c-7a98-4636-b11c-2651b01f443f",
+          "type": "setEntitySpeedLimits",
+          "movementSpeed": [
+            "3"
+          ]
+        },
+        {
+          "name": "Head To Target",
+          "id": "0cb5d682-6b31-4558-bff4-f3b2b005ad65",
+          "type": "scriptAction",
+          "script": [
+            "self:ReqHeadingFormationIfStationary()"
+          ]
+        },
+        {
+          "name": "Crouch",
+          "id": "d4d04684-b3f4-4732-8ab2-118d784709b6",
+          "type": "reference",
+          "target": [
+            "behaviors_borecky_jan",
+            "stance_crouched"
+          ],
+          "arguments": {}
+        },
+        {
+          "name": "Move",
+          "id": "7c43032e-9537-4a96-bf4e-e497ad81e8e2",
+          "type": "move",
+          "position": [
+            "bb.position"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "f9cf1ccc-ff07-4260-a15a-d93c63bb626a",
+          "type": "scriptCondition",
+          "name": "Check Have Target Position",
+          "script": [
+            "return bb.position ~= nil"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Succeed",
+      "id": "dcf75fbf-02b3-421a-ba7f-0d1716b8a543",
+      "type": "success"
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "c02fb5a7-d87d-476a-aa81-8e2c2437a33f",
+        "position": "1837.5,206.7"
+      },
+      {
+        "id": "e8fcad51-804c-4a4d-87d5-59c1efd0d995",
+        "position": "1650,356.7"
+      },
+      {
+        "id": "5a071a0c-7a98-4636-b11c-2651b01f443f",
+        "position": "1387.5,594.2"
+      },
+      {
+        "id": "0cb5d682-6b31-4558-bff4-f3b2b005ad65",
+        "position": "1550,594.2"
+      },
+      {
+        "id": "d4d04684-b3f4-4732-8ab2-118d784709b6",
+        "position": "1725,594.2"
+      },
+      {
+        "id": "7c43032e-9537-4a96-bf4e-e497ad81e8e2",
+        "position": "1900,594.2"
+      },
+      {
+        "id": "dcf75fbf-02b3-421a-ba7f-0d1716b8a543",
+        "position": "2012.5,394.2"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2519.2",
+    "gridPadding": "0,6.69999999999999"
+  },
+  "active": true,
+  "parameters": [],
+  "locals": {}
+}

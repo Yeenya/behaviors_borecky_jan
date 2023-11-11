@@ -1,0 +1,20 @@
+{
+  "name": "Crouched Stance",
+  "id": "04899d9c-a649-4129-a151-d6acf12f2f76",
+  "type": "setStance",
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "04899d9c-a649-4129-a151-d6acf12f2f76",
+        "position": "1764.4,282.4"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "stance": [
+    "return Stance.Crouched"
+  ],
+  "parameters": [],
+  "locals": {}
+}

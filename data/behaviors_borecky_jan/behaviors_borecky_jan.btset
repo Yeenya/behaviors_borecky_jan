@@ -1,6 +1,10 @@
 {
   "name": "behaviors_borecky_jan",
   "trees": [
+    "individual\\move_to_target.bt",
+    "individual\\shoot_closest_enemy.bt",
+    "individual\\stance_crouched.bt",
+    "individual\\stance_prone.bt",
     "first_behavior.bt"
   ],
   "initScripts": [],

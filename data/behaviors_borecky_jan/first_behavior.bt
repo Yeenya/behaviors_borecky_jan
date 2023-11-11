@@ -1,5 +1,5 @@
 {
-  "name": "<unnamed>",
+  "name": "Root",
   "id": "5c5efe22-c413-4391-ab86-af5437a1b411",
   "type": "supervisedParallel",
   "subtrees": [
@@ -15,6 +15,35 @@
           "script": [
             "loc.soldierPosition = self:GetEntity(0):GetPosition()"
           ]
+        },
+        {
+          "name": "Check BB Position",
+          "id": "67ba65b8-246e-4941-8d9d-6d9b16d94d42",
+          "type": "waitUntil",
+          "condition": [
+            "return bb.position ~= nil"
+          ]
+        },
+        {
+          "name": "Query Path",
+          "id": "aabbbcab-8938-4cd3-8966-f7388cc5779b",
+          "type": "scriptAction",
+          "script": [
+            "loc.pathQuery = FindPath(loc.soldierPosition, bb.position)"
+          ]
+        },
+        {
+          "name": "Wait For Result",
+          "id": "359b933d-6ea5-4871-b590-7ae838d2d840",
+          "type": "waitUntil",
+          "condition": [
+            "local isReady = loc.pathQuery:IsReady()",
+            "if isReady then",
+            "loc.path = loc.pathQuery:Value()",
+            "loc.pathQuery = nil",
+            "end",
+            "return isReady"
+          ]
         }
       ],
       "decorators": [
@@ -26,7 +55,7 @@
       ]
     },
     {
-      "name": "Debug",
+      "name": "Debug Line",
       "id": "fd84d83d-14a4-4d2a-a6ea-01f3acc4c540",
       "type": "scriptAction",
       "script": [
@@ -36,33 +65,92 @@
         "    1, 0, 0, 0 ",
         ")"
       ]
+    },
+    {
+      "name": "Debug Path",
+      "id": "ba1375c2-1bfd-427c-9ede-d2c779b649ec",
+      "type": "scriptAction",
+      "script": [
+        "local function Line(from, to, r, g, b, a)",
+        "    DebugLine(from, to, r, g, b, a)",
+        "end",
+        "",
+        "local function PolylineOnSurface(points, r, g, b, a, offset)",
+        "    if offset == nil then",
+        "        offset = Vec3(0,0,0)",
+        "    end",
+        "    for i = 1, #points do",
+        "\t    points[i] = GetSurfacePosition(points[i]) + offset",
+        "\tend",
+        "    for i = 1, #points-1 do",
+        "\t    Line(points[i], points[i+1], r, g, b, a)",
+        "\tend            ",
+        "end",
+        "",
+        "local path = loc.path",
+        "if path == nil then",
+        "    return",
+        "end",
+        "local offset",
+        "if offset == nil then",
+        "    offset = Vec3(0,0,1.7)",
+        "end",
+        "",
+        "local segmentCount = path:GetSegmentCount()",
+        "local points = {}",
+        "",
+        "for i = 0, segmentCount-1 do",
+        "    points[i+1] = path:GetSegmentStart(i)",
+        "end",
+        "",
+        "points[#points+1] = path:GetSegmentEnd(segmentCount-1)",
+        "PolylineOnSurface(points,0, 1, 1, 1, offset)"
+      ]
     }
   ],
   "meta": {
     "nodesInfo": [
       {
         "id": "5c5efe22-c413-4391-ab86-af5437a1b411",
-        "position": "1862.5,73.9842424242425"
+        "position": "1862.5,125.984242424242"
       },
       {
         "id": "f08603ee-621f-4f5f-bbdb-acb29a8720a4",
-        "position": "1862.5,298.984242424243"
+        "position": "1862.5,325.984242424242"
       },
       {
         "id": "351367d8-9b9d-4ec8-96ac-db1184dce389",
-        "position": "1862.5,473.984242424243"
+        "position": "1500,525.984242424242"
+      },
+      {
+        "id": "67ba65b8-246e-4941-8d9d-6d9b16d94d42",
+        "position": "1700,525.984242424242"
+      },
+      {
+        "id": "aabbbcab-8938-4cd3-8966-f7388cc5779b",
+        "position": "1875,525.984242424242"
+      },
+      {
+        "id": "359b933d-6ea5-4871-b590-7ae838d2d840",
+        "position": "2037.5,525.984242424242"
       },
       {
         "id": "fd84d83d-14a4-4d2a-a6ea-01f3acc4c540",
-        "position": "2137.5,198.984242424242"
+        "position": "2050,238.484242424242"
+      },
+      {
+        "id": "ba1375c2-1bfd-427c-9ede-d2c779b649ec",
+        "position": "2237.5,238.484242424242"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2573.98424242425",
-    "gridPadding": "0,11.4842424242425"
+    "canvasSize": "3840,2625.98424242425",
+    "gridPadding": "0,0.984242424242129"
   },
   "parameters": [],
   "locals": {
-    "soldierPosition": "return nil"
+    "soldierPosition": "return nil",
+    "pathQuery": "return nil",
+    "path": "return nil"
   }
 }

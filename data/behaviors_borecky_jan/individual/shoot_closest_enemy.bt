@@ -1,0 +1,113 @@
+{
+  "name": "Root",
+  "id": "59694134-22db-4067-9374-36b750121676",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Get Nearest Soldier",
+      "id": "7c7e4891-e25d-4bf2-bb77-654d416d3200",
+      "type": "scriptAction",
+      "script": [
+        "for i, entity in ipairs(",
+        "    GetEntitiesInArea(",
+        "        Circle(",
+        "            self:GetPosition(),",
+        "            50),",
+        "        {",
+        "            enemyOf = self ",
+        "        }",
+        "    ) ",
+        ") do",
+        "    loc.target = entity",
+        "    break",
+        "end"
+      ]
+    },
+    {
+      "name": "Shoot Or Idle",
+      "id": "7b02640a-a136-412b-ae3e-cc8b46281004",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "DESTROY!",
+          "id": "440dcd7f-ec1b-4780-91d6-f316eebfe217",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Aim",
+              "id": "d1b86713-55e7-4e85-b88b-e3b23b547505",
+              "type": "scriptAction",
+              "script": [
+                "self:ReqHeadingAimAtEntity(loc.target)"
+              ]
+            },
+            {
+              "name": "Annihilate!",
+              "id": "5c805b8f-2b58-4117-868d-55ebf485a75f",
+              "type": "fire",
+              "rounds": [
+                "3"
+              ],
+              "forced": false
+            }
+          ],
+          "decorators": [
+            {
+              "id": "65b6187b-3145-40ce-b7e2-7ce8e1b3e65d",
+              "type": "scriptCondition",
+              "name": "Check Have Target",
+              "script": [
+                "return loc.target ~= nil"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Succeed",
+          "id": "db8064be-8bb0-4eb2-a694-00e871319aa0",
+          "type": "success"
+        }
+      ],
+      "active": true
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "59694134-22db-4067-9374-36b750121676",
+        "position": "1650,188"
+      },
+      {
+        "id": "7c7e4891-e25d-4bf2-bb77-654d416d3200",
+        "position": "1598,560"
+      },
+      {
+        "id": "7b02640a-a136-412b-ae3e-cc8b46281004",
+        "position": "1812.5,288"
+      },
+      {
+        "id": "440dcd7f-ec1b-4780-91d6-f316eebfe217",
+        "position": "1825,388"
+      },
+      {
+        "id": "d1b86713-55e7-4e85-b88b-e3b23b547505",
+        "position": "1775,563"
+      },
+      {
+        "id": "5c805b8f-2b58-4117-868d-55ebf485a75f",
+        "position": "1950,563"
+      },
+      {
+        "id": "db8064be-8bb0-4eb2-a694-00e871319aa0",
+        "position": "2075,438"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2588",
+    "gridPadding": "0,0.500000000000028"
+  },
+  "parameters": [],
+  "locals": {
+    "target": "return nil"
+  }
+}
