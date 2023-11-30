@@ -1,10 +1,13 @@
 {
   "name": "behaviors_borecky_jan",
   "trees": [
+    "individual\\kill_minotaurus_advanced.bt",
+    "individual\\kill_minotaurus_basic.bt",
     "individual\\move_to_target.bt",
     "individual\\shoot_closest_enemy.bt",
     "individual\\stance_crouched.bt",
     "individual\\stance_prone.bt",
+    "individual\\stance_standing.bt",
     "first_behavior.bt"
   ],
   "initScripts": [],

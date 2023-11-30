@@ -1,0 +1,343 @@
+{
+  "name": "Root",
+  "id": "ab51b5de-d816-4714-b402-ac6469e6161f",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Killing Time",
+      "id": "0d3d223f-b1f4-4b51-a376-f101c185adb8",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Find Minotaurus",
+          "id": "84174dac-4e53-4bef-9c34-ba2412955c7e",
+          "type": "scriptAction",
+          "script": [
+            "for i, entity in ipairs(",
+            "    GetEntitiesInArea(",
+            "        Circle(",
+            "            self:GetPosition(),",
+            "            1000),",
+            "        {",
+            "            enemyOf = self ",
+            "        }",
+            "    ) ",
+            ") do",
+            "    loc.target = entity",
+            "    break",
+            "end"
+          ]
+        },
+        {
+          "name": "Query Path",
+          "id": "57caab37-7a15-43c4-b1a3-fa577abdad59",
+          "type": "scriptAction",
+          "decorators": [
+            {
+              "id": "9c707b84-996f-4f69-9747-a45b082ceaf9",
+              "type": "scriptCondition",
+              "name": "Has Target",
+              "script": [
+                "return (loc.target ~= nil)"
+              ]
+            }
+          ],
+          "script": [
+            "loc.pathQuery = FindPath(self:GetPosition(), loc.target:GetPosition())"
+          ]
+        },
+        {
+          "name": "Wait Or Go",
+          "id": "087b2044-7065-4cd9-9876-6fbd66c69ab7",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Stop and Go",
+              "id": "7a5dd53e-bbe1-4281-8a67-5f09ead97c7d",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Stop",
+                  "id": "fffdba46-b08b-497a-8ae2-10f0e8f66ccd",
+                  "type": "setEntitySpeedLimits",
+                  "movementSpeed": [
+                    "0"
+                  ]
+                },
+                {
+                  "name": "Wait",
+                  "id": "58472c22-1860-4d82-b4a3-accebb3e1f9e",
+                  "type": "wait",
+                  "time": [
+                    "1"
+                  ]
+                },
+                {
+                  "name": "Go",
+                  "id": "2286b18f-6ca8-4ffd-8045-d3ab5a35b09a",
+                  "type": "setEntitySpeedLimits",
+                  "movementSpeed": [
+                    "9"
+                  ]
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "8ad18482-c3fc-48b2-a038-70e3785568ee",
+                  "type": "scriptCondition",
+                  "name": "Check Corner",
+                  "script": [
+                    "if loc.path:GetSegmentCount() <= 1 then",
+                    "    return false",
+                    "end",
+                    "local currentAngle = loc.path:GetSegmentEnd(0) - self:GetPosition()",
+                    "local futureAngle = loc.path:GetSegmentEnd(1) - self:GetPosition()",
+                    "return currentAngle:AngleTo(futureAngle) > 70"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Follow and succeed",
+              "id": "d834dc75-63a9-40f4-a555-ed7398f38177",
+              "type": "parallel",
+              "subtrees": [
+                {
+                  "name": "Follow",
+                  "id": "c040019e-c8c0-4625-ba37-969f52a6a937",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "Ensure Movement",
+                      "id": "68b6b314-4ed5-439c-9330-318d2572fadb",
+                      "type": "setEntitySpeedLimits",
+                      "movementSpeed": [
+                        "9"
+                      ]
+                    },
+                    {
+                      "name": "Follow Entity",
+                      "id": "bafd0dff-29e3-41d9-bdf0-4549d3e06549",
+                      "type": "followEntity",
+                      "entity": [
+                        "loc.target"
+                      ],
+                      "distance": [
+                        "1"
+                      ],
+                      "restrictions": [
+                        "nil"
+                      ],
+                      "boundaries": [
+                        "nil"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Succeed",
+                  "id": "ce5dadc6-e98e-422c-9168-dcc4a1c1f6e9",
+                  "type": "success",
+                  "decorators": [
+                    {
+                      "id": "6f0a712c-8cac-4741-8254-44c24527e2ad",
+                      "type": "wait",
+                      "name": "Let Follow Entity Do Stuff",
+                      "time": [
+                        "1"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "waitForAll": false
+            }
+          ],
+          "decorators": [
+            {
+              "id": "e3e18b44-f8e9-4411-b75d-9914e9a0c430",
+              "type": "waitUntil",
+              "name": "Wait For Result",
+              "condition": [
+                "local isReady = loc.pathQuery:IsReady()",
+                "if isReady then",
+                "loc.path = loc.pathQuery:Value()",
+                "loc.pathQuery = nil",
+                "end",
+                "return isReady"
+              ]
+            }
+          ],
+          "active": true
+        },
+        {
+          "name": "Aim And Shoot",
+          "id": "feca2dcc-6503-4ce9-8d6c-119cca8b87db",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Aim",
+              "id": "b4f90d60-bbe2-454f-8429-5c99db98b3c3",
+              "type": "scriptAction",
+              "script": [
+                "self:ReqHeadingAimAtEntity(loc.target)"
+              ]
+            },
+            {
+              "name": "Kill",
+              "id": "01d691b9-7b0a-4a74-93f1-2d7c63db83ea",
+              "type": "fire",
+              "rounds": [
+                "3"
+              ],
+              "forced": false
+            }
+          ],
+          "decorators": [
+            {
+              "id": "2512b6a2-ffde-469b-98a4-55f6206567b5",
+              "type": "scriptCondition",
+              "name": "Can See Target",
+              "script": [
+                "return self:IsVisible(loc.target)"
+              ]
+            }
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "50141435-61c2-42e2-a160-d65b1d0d75c6",
+          "type": "loopForever",
+          "name": "Loop"
+        }
+      ]
+    },
+    {
+      "name": "Debug Path",
+      "id": "c920dc58-dada-45f0-9085-2b979bafecc7",
+      "type": "scriptAction",
+      "script": [
+        "local function Line(from, to, r, g, b, a)",
+        "    DebugLine(from, to, r, g, b, a)",
+        "end",
+        "",
+        "local function PolylineOnSurface(points, r, g, b, a, offset)",
+        "    if offset == nil then",
+        "        offset = Vec3(0,0,0)",
+        "    end",
+        "    for i = 1, #points do",
+        "\t    points[i] = GetSurfacePosition(points[i]) + offset",
+        "\tend",
+        "    for i = 1, #points-1 do",
+        "\t    Line(points[i], points[i+1], r, g, b, a)",
+        "\tend            ",
+        "end",
+        "",
+        "local path = loc.path",
+        "if path == nil then",
+        "    return",
+        "end",
+        "local offset",
+        "if offset == nil then",
+        "    offset = Vec3(0,0,1.7)",
+        "end",
+        "",
+        "local segmentCount = path:GetSegmentCount()",
+        "local points = {}",
+        "",
+        "for i = 0, segmentCount-1 do",
+        "    points[i+1] = path:GetSegmentStart(i)",
+        "end",
+        "",
+        "points[#points+1] = path:GetSegmentEnd(segmentCount-1)",
+        "PolylineOnSurface(points,0, 1, 1, 1, offset)"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "ab51b5de-d816-4714-b402-ac6469e6161f",
+        "position": "1246.03492063492,108.014285714286"
+      },
+      {
+        "id": "0d3d223f-b1f4-4b51-a376-f101c185adb8",
+        "position": "1233.53492063492,245.514285714286"
+      },
+      {
+        "id": "84174dac-4e53-4bef-9c34-ba2412955c7e",
+        "position": "946.034920634921,508.014285714286"
+      },
+      {
+        "id": "57caab37-7a15-43c4-b1a3-fa577abdad59",
+        "position": "1121.03492063492,508.014285714286"
+      },
+      {
+        "id": "087b2044-7065-4cd9-9876-6fbd66c69ab7",
+        "position": "1337.5,511.3"
+      },
+      {
+        "id": "7a5dd53e-bbe1-4281-8a67-5f09ead97c7d",
+        "position": "1050,648.8"
+      },
+      {
+        "id": "fffdba46-b08b-497a-8ae2-10f0e8f66ccd",
+        "position": "862.5,836.3"
+      },
+      {
+        "id": "58472c22-1860-4d82-b4a3-accebb3e1f9e",
+        "position": "1050,836.3"
+      },
+      {
+        "id": "2286b18f-6ca8-4ffd-8045-d3ab5a35b09a",
+        "position": "1237.5,836.3"
+      },
+      {
+        "id": "d834dc75-63a9-40f4-a555-ed7398f38177",
+        "position": "1487.5,686.3"
+      },
+      {
+        "id": "c040019e-c8c0-4625-ba37-969f52a6a937",
+        "position": "1500,761.3"
+      },
+      {
+        "id": "68b6b314-4ed5-439c-9330-318d2572fadb",
+        "position": "1437.5,836.3"
+      },
+      {
+        "id": "bafd0dff-29e3-41d9-bdf0-4549d3e06549",
+        "position": "1600,836.3"
+      },
+      {
+        "id": "ce5dadc6-e98e-422c-9168-dcc4a1c1f6e9",
+        "position": "1887.5,798.8"
+      },
+      {
+        "id": "feca2dcc-6503-4ce9-8d6c-119cca8b87db",
+        "position": "1821.03492063492,470.514285714286"
+      },
+      {
+        "id": "b4f90d60-bbe2-454f-8429-5c99db98b3c3",
+        "position": "1758.53492063492,658.014285714286"
+      },
+      {
+        "id": "01d691b9-7b0a-4a74-93f1-2d7c63db83ea",
+        "position": "2021.03492063492,645.514285714286"
+      },
+      {
+        "id": "c920dc58-dada-45f0-9085-2b979bafecc7",
+        "position": "1458.53492063492,183.014285714286"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3945.6,2648.8",
+    "gridPadding": "0,11.3"
+  },
+  "parameters": [],
+  "locals": {
+    "target": "return nil",
+    "path": "return nil",
+    "pathQuery": "return nil"
+  }
+}

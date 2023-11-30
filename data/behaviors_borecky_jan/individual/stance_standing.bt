@@ -1,0 +1,20 @@
+{
+  "name": "Standing Stance",
+  "id": "c69fdb5c-0a8b-4614-9753-e23329aeede0",
+  "type": "setStance",
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "c69fdb5c-0a8b-4614-9753-e23329aeede0",
+        "position": "1812.5,250"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "stance": [
+    "return Stance.Standing"
+  ],
+  "parameters": [],
+  "locals": {}
+}
