@@ -1,0 +1,192 @@
+{
+  "name": "<unnamed>",
+  "id": "4c2413a4-a025-40c3-b22f-72e0613f64d7",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Find Friend",
+      "id": "1dbc76b2-0d0c-4ec2-96ae-521d12f1bd21",
+      "type": "scriptAction",
+      "script": [
+        "for i, entity in ipairs(",
+        "    GetEntitiesInArea(",
+        "        Circle(",
+        "            self:GetPosition(), ",
+        "            100",
+        "        )",
+        "    )",
+        ") ",
+        "do",
+        "    loc.leader = entity",
+        "    loc.lastLeaderPosition = entity:GetPosition()",
+        "    break",
+        "end"
+      ]
+    },
+    {
+      "name": "<unnamed>",
+      "id": "b786049e-473f-4cba-b8e3-2649fb1c563e",
+      "type": "supervisedParallel",
+      "subtrees": [
+        {
+          "name": "<unnamed>",
+          "id": "620c28d7-36eb-429b-8244-e40c06bdca2b",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "<unnamed>",
+              "id": "5adb75c6-c4cf-47f6-b73a-0523a3c02ce5",
+              "type": "reference",
+              "decorators": [
+                {
+                  "id": "62af8ccf-ff78-41aa-86bb-639c37cdde1f",
+                  "type": "scriptCondition",
+                  "name": "Is Nearby",
+                  "script": [
+                    "return loc.leader:GetPosition():Distance(self:GetPosition()) < 40"
+                  ]
+                },
+                {
+                  "id": "1e41ce92-b612-462a-8393-e9461133115b",
+                  "type": "scriptCondition",
+                  "name": "Is Idle",
+                  "script": [
+                    "return loc.isIdle"
+                  ]
+                }
+              ],
+              "target": [
+                "behaviors_borecky_jan",
+                "find_nearby_cover2"
+              ],
+              "arguments": {}
+            },
+            {
+              "name": "<unnamed>",
+              "id": "fe7709ba-f2a7-4ea9-9f5c-11f2e21ce828",
+              "type": "reference",
+              "target": [
+                "behaviors_borecky_jan",
+                "follow_and_fire"
+              ],
+              "arguments": {
+                "unitToFollow": "return loc.leader"
+              }
+            }
+          ],
+          "active": true
+        },
+        {
+          "name": "Check If Is Idle",
+          "id": "e074ee63-9f66-4069-b789-ee9f8880f529",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Is Idle?",
+              "id": "ae6056c7-a508-495e-aa9f-b1c900963508",
+              "type": "scriptAction",
+              "script": [
+                "local currentPosition = loc.leader:GetPosition()",
+                "",
+                "if currentPosition:Distance(loc.lastLeaderPosition) > 0.5 then",
+                "    loc.isIdle = false",
+                "else",
+                "    loc.isIdle = true",
+                "end",
+                "",
+                "loc.lastLeaderPosition = currentPosition"
+              ]
+            },
+            {
+              "name": "Wait",
+              "id": "8b076fab-89bc-451b-b0ff-eb30e32ed280",
+              "type": "wait",
+              "time": [
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "<unnamed>",
+          "id": "e967ed36-1ce8-40ee-a3d0-4e196aa3d9c9",
+          "type": "scriptAction",
+          "script": [
+            "DebugLine(self:GetPosition() + Vec3(0, 0, 1), loc.leader:GetPosition(), 1, 0, 0, 1)"
+          ]
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "4c2413a4-a025-40c3-b22f-72e0613f64d7",
+        "position": "1762.5,206.15"
+      },
+      {
+        "id": "1dbc76b2-0d0c-4ec2-96ae-521d12f1bd21",
+        "position": "1537.5,481.15"
+      },
+      {
+        "id": "b786049e-473f-4cba-b8e3-2649fb1c563e",
+        "position": "1775,481.15"
+      },
+      {
+        "id": "bb760fbb-f7b3-4b2c-a677-7f1f7742d10e",
+        "position": "2037.5,543.65"
+      },
+      {
+        "id": "620c28d7-36eb-429b-8244-e40c06bdca2b",
+        "position": "1762.5,631.15"
+      },
+      {
+        "id": "5adb75c6-c4cf-47f6-b73a-0523a3c02ce5",
+        "position": "1587.5,768.65"
+      },
+      {
+        "id": "fe7709ba-f2a7-4ea9-9f5c-11f2e21ce828",
+        "position": "1887.5,793.65"
+      },
+      {
+        "id": "e074ee63-9f66-4069-b789-ee9f8880f529",
+        "position": "2150,593.65"
+      },
+      {
+        "id": "ae6056c7-a508-495e-aa9f-b1c900963508",
+        "position": "2062.5,706.15"
+      },
+      {
+        "id": "8b076fab-89bc-451b-b0ff-eb30e32ed280",
+        "position": "2262.5,706.15"
+      },
+      {
+        "id": "e967ed36-1ce8-40ee-a3d0-4e196aa3d9c9",
+        "position": "2512.5,593.65"
+      }
+    ],
+    "editorObjects": [
+      {
+        "id": "bb760fbb-f7b3-4b2c-a677-7f1f7742d10e",
+        "type": "comment",
+        "header": "tady pocitam jestli je idle",
+        "body": "",
+        "bodyAlignment": "Left",
+        "width": 411.00000000000023,
+        "height": 225.2,
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      }
+    ],
+    "canvasSize": "3840,2831.15",
+    "gridPadding": "0,6.14999999999978"
+  },
+  "parameters": [],
+  "locals": {
+    "lastLeaderPosition": "return nil",
+    "isIdle": "return false",
+    "leader": "return nil"
+  }
+}

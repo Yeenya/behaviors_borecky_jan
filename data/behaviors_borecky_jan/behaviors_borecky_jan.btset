@@ -3,9 +3,12 @@
   "trees": [
     "individual\\find_nearby_cover.bt",
     "individual\\find_nearby_cover2.bt",
+    "individual\\follow.bt",
+    "individual\\follow_and_fire.bt",
     "individual\\kill_minotaurus_advanced.bt",
     "individual\\kill_minotaurus_basic.bt",
     "individual\\move_to_target.bt",
+    "individual\\safe_move.bt",
     "individual\\shoot_closest_enemy.bt",
     "individual\\stance_crouched.bt",
     "individual\\stance_prone.bt",

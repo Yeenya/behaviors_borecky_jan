@@ -272,7 +272,7 @@
     "enemies": "return {}",
     "covers": "return nil",
     "coversQuery": "return nil",
-    "searchRadius": "return 100",
+    "searchRadius": "return 10",
     "pathQuery": "return nil",
     "path": "return nil"
   }

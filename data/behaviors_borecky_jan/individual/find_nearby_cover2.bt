@@ -43,123 +43,154 @@
               ]
             },
             {
-              "name": "Stance and Move",
-              "id": "66d9b8a4-8707-4ee1-bd3f-747fad84dee0",
-              "type": "sequence",
+              "name": "<unnamed>",
+              "id": "c1e82d29-9f7e-4418-8f3d-7812b5022c9d",
+              "type": "selector",
               "subtrees": [
                 {
-                  "name": "Head To Target",
-                  "id": "974a1cc0-9bea-4d53-b308-eea22cb500c2",
-                  "type": "scriptAction",
-                  "script": [
-                    "self:ReqHeadingAimAtEntity(loc.enemies[1])"
-                  ]
-                },
-                {
-                  "name": "Vector Stuff",
-                  "id": "3b27bca1-d2f3-4a24-9b58-cd8a4a84d8cf",
-                  "type": "scriptAction",
-                  "script": [
-                    "local coversGoodness = {}",
-                    "for i, cover in ipairs(loc.covers) do",
-                    "    local coverVector = loc.covers[i].vertices[2] - loc.covers[i].vertices[1]",
-                    "    coverVector = coverVector:Normalized()",
-                    "    local enemyVector = loc.enemies[1]:GetPosition() - loc.covers[i].vertices[1]",
-                    "    enemyVector = enemyVector:Normalized()",
-                    "",
-                    "    local angleDiff = enemyVector:AngleTo(coverVector)",
-                    "    if angleDiff > 0 then",
-                    "        coversGoodness[i] = math.abs(90 - angleDiff)",
-                    "    else",
-                    "        coversGoodness[i] = 91",
-                    "    end",
-                    "end",
-                    "",
-                    "--[[",
-                    "DebugLog('Goodnesses')",
-                    "for i, goodness in ipairs(coversGoodness) do",
-                    "    DebugLog(''..tostring(goodness)..'')",
-                    "end",
-                    "DebugLog('End of Goodnesses')",
-                    "]]--",
-                    "",
-                    "loc.selectedCover = loc.covers[1]",
-                    "local bestGoodness = coversGoodness[1]",
-                    "for i, goodness in ipairs(coversGoodness) do",
-                    "    if coversGoodness[i] < bestGoodness then",
-                    "        loc.selectedCover = loc.covers[i]",
-                    "        bestGoodness = coversGoodness[i]",
-                    "    end",
-                    "end"
-                  ]
-                },
-                {
-                  "name": "Query Path",
-                  "id": "1e08a4c2-0fe2-479d-a788-8f4ae02cf035",
-                  "type": "scriptAction",
-                  "script": [
-                    "loc.pathQuery = FindPath(self:GetPosition(), GetSurfacePosition(loc.selectedCover.vertices[1]))"
-                  ]
-                },
-                {
-                  "name": "Move",
-                  "id": "2d250e1b-bda2-4aec-8163-434a9790898b",
-                  "type": "move",
+                  "name": "Stance and Move",
+                  "id": "66d9b8a4-8707-4ee1-bd3f-747fad84dee0",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "Head To Target",
+                      "id": "974a1cc0-9bea-4d53-b308-eea22cb500c2",
+                      "type": "scriptAction",
+                      "script": [
+                        "self:ReqHeadingAimAtEntity(loc.enemies[1])"
+                      ]
+                    },
+                    {
+                      "name": "Vector Stuff",
+                      "id": "3b27bca1-d2f3-4a24-9b58-cd8a4a84d8cf",
+                      "type": "scriptAction",
+                      "script": [
+                        "local coversGoodness = {}",
+                        "for i, cover in ipairs(loc.covers) do",
+                        "    local coverVector = loc.covers[i].vertices[2] - loc.covers[i].vertices[1]",
+                        "    coverVector = coverVector:Normalized()",
+                        "    local enemyVector = loc.enemies[1]:GetPosition() - loc.covers[i].vertices[1]",
+                        "    enemyVector = enemyVector:Normalized()",
+                        "",
+                        "    local angleDiff = enemyVector:AngleTo(coverVector)",
+                        "    if angleDiff > 0 then",
+                        "        coversGoodness[i] = math.abs(90 - angleDiff)",
+                        "    else",
+                        "        coversGoodness[i] = 91",
+                        "    end",
+                        "end",
+                        "",
+                        "--[[",
+                        "DebugLog('Goodnesses')",
+                        "for i, goodness in ipairs(coversGoodness) do",
+                        "    DebugLog(''..tostring(goodness)..'')",
+                        "end",
+                        "DebugLog('End of Goodnesses')",
+                        "]]--",
+                        "",
+                        "loc.selectedCover = loc.covers[1]",
+                        "local bestGoodness = coversGoodness[1]",
+                        "for i, goodness in ipairs(coversGoodness) do",
+                        "    if coversGoodness[i] < bestGoodness then",
+                        "        loc.selectedCover = loc.covers[i]",
+                        "        bestGoodness = coversGoodness[i]",
+                        "    end",
+                        "end"
+                      ]
+                    },
+                    {
+                      "name": "Query Path",
+                      "id": "1e08a4c2-0fe2-479d-a788-8f4ae02cf035",
+                      "type": "scriptAction",
+                      "script": [
+                        "if loc.selectedCover == nil then",
+                        "    return false",
+                        "end",
+                        "loc.pathQuery = FindPath(self:GetPosition(), GetSurfacePosition(loc.selectedCover.vertices[1]))"
+                      ]
+                    },
+                    {
+                      "name": "Move",
+                      "id": "2d250e1b-bda2-4aec-8163-434a9790898b",
+                      "type": "move",
+                      "decorators": [
+                        {
+                          "id": "88e0d85f-3a4d-4e17-9e4a-66e8767f92b9",
+                          "type": "waitUntil",
+                          "name": "Wait For Result",
+                          "condition": [
+                            "local isReady = loc.pathQuery:IsReady()",
+                            "if isReady then",
+                            "loc.path = loc.pathQuery:Value()",
+                            "loc.pathQuery = nil",
+                            "end",
+                            "return isReady"
+                          ]
+                        }
+                      ],
+                      "position": [
+                        "loc.selectedCover.vertices[1]"
+                      ]
+                    },
+                    {
+                      "name": "Reset",
+                      "id": "31b14609-176c-4f55-80fd-378ee101dc70",
+                      "type": "scriptAction",
+                      "script": [
+                        "loc.covers = nil",
+                        "loc.enemies = {}",
+                        "loc.selectedCover = nil"
+                      ]
+                    }
+                  ],
                   "decorators": [
                     {
-                      "id": "88e0d85f-3a4d-4e17-9e4a-66e8767f92b9",
+                      "id": "55e57086-965e-420d-85a6-3f0f1a0e254a",
+                      "type": "scriptCondition",
+                      "name": "Is Enemy Nearby?",
+                      "script": [
+                        "return loc.enemies[1] ~= nil"
+                      ]
+                    },
+                    {
+                      "id": "637db3fb-1e1d-4c48-a0d6-d36b3d646b33",
                       "type": "waitUntil",
-                      "name": "Wait For Result",
+                      "name": "Wait For Covers",
                       "condition": [
-                        "local isReady = loc.pathQuery:IsReady()",
+                        "local isReady = loc.coversQuery:IsReady()",
                         "if isReady then",
-                        "loc.path = loc.pathQuery:Value()",
-                        "loc.pathQuery = nil",
+                        "loc.covers = loc.coversQuery:Value()",
+                        "loc.coversQuery = nil",
                         "end",
                         "return isReady"
                       ]
                     }
-                  ],
-                  "position": [
-                    "loc.selectedCover.vertices[1]"
                   ]
                 },
                 {
-                  "name": "Reset",
-                  "id": "31b14609-176c-4f55-80fd-378ee101dc70",
-                  "type": "scriptAction",
-                  "script": [
-                    "loc.covers = nil",
-                    "loc.enemies = {}",
-                    "loc.selectedCover = nil"
+                  "name": "<unnamed>",
+                  "id": "8a223d13-57cb-4302-924d-6d841170cc93",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "Reset",
+                      "id": "6cef9a70-45f9-419e-bb94-58fb7f8e52a1",
+                      "type": "scriptAction",
+                      "script": [
+                        "loc.covers = nil",
+                        "loc.enemies = {}",
+                        "loc.selectedCover = nil"
+                      ]
+                    },
+                    {
+                      "name": "Wait Forever",
+                      "id": "49e465cd-88ad-49e8-a418-5bc0dc76cb8f",
+                      "type": "waitForever"
+                    }
                   ]
                 }
               ],
-              "decorators": [
-                {
-                  "id": "637db3fb-1e1d-4c48-a0d6-d36b3d646b33",
-                  "type": "waitUntil",
-                  "name": "Wait For Covers",
-                  "condition": [
-                    "local isReady = loc.coversQuery:IsReady()",
-                    "if isReady then",
-                    "loc.covers = loc.coversQuery:Value()",
-                    "loc.coversQuery = nil",
-                    "end",
-                    "return isReady"
-                  ]
-                }
-              ]
-            }
-          ],
-          "decorators": [
-            {
-              "id": "55e57086-965e-420d-85a6-3f0f1a0e254a",
-              "type": "scriptCondition",
-              "name": "Is Enemy Nearby?",
-              "script": [
-                "return loc.enemies[1] ~= nil"
-              ]
+              "active": true
             }
           ]
         }
@@ -211,56 +242,72 @@
     "nodesInfo": [
       {
         "id": "19cabc80-4add-4bfc-8aa1-9d7a1480ea3b",
-        "position": "1623.3,53.2000000000004"
+        "position": "1623.3,117.177777777778"
       },
       {
         "id": "75abd5fa-7f05-4b4d-a2c4-7ae6bc33ec2c",
-        "position": "1623.3,190.7"
+        "position": "1623.3,254.677777777778"
       },
       {
         "id": "aed0c0af-5aa8-4587-a31f-a333bb90b5d4",
-        "position": "1398.3,328.2"
+        "position": "1398.3,392.177777777778"
       },
       {
         "id": "a44d3935-957f-4406-95e6-8017b6ddfa8f",
-        "position": "1623.3,328.2"
+        "position": "1623.3,392.177777777778"
       },
       {
         "id": "a8e34eaa-812f-4bd6-88e9-6fde1493b496",
-        "position": "1398.3,490.7"
+        "position": "1398.3,554.677777777777"
+      },
+      {
+        "id": "c1e82d29-9f7e-4418-8f3d-7812b5022c9d",
+        "position": "1625,505.477777777778"
       },
       {
         "id": "66d9b8a4-8707-4ee1-bd3f-747fad84dee0",
-        "position": "1623.3,490.7"
+        "position": "1625,630.477777777778"
       },
       {
         "id": "974a1cc0-9bea-4d53-b308-eea22cb500c2",
-        "position": "1250,654"
+        "position": "1239.2,818.777777777778"
       },
       {
         "id": "3b27bca1-d2f3-4a24-9b58-cd8a4a84d8cf",
-        "position": "1450,654"
+        "position": "1439.2,818.777777777778"
       },
       {
         "id": "1e08a4c2-0fe2-479d-a788-8f4ae02cf035",
-        "position": "1650,654"
+        "position": "1639.2,818.777777777778"
       },
       {
         "id": "2d250e1b-bda2-4aec-8163-434a9790898b",
-        "position": "1887.5,654"
+        "position": "1876.7,818.777777777778"
       },
       {
         "id": "31b14609-176c-4f55-80fd-378ee101dc70",
-        "position": "2125,654"
+        "position": "2114.2,818.777777777778"
+      },
+      {
+        "id": "8a223d13-57cb-4302-924d-6d841170cc93",
+        "position": "1915.64444444444,572.666666666667"
+      },
+      {
+        "id": "6cef9a70-45f9-419e-bb94-58fb7f8e52a1",
+        "position": "1850,667.977777777778"
+      },
+      {
+        "id": "49e465cd-88ad-49e8-a418-5bc0dc76cb8f",
+        "position": "2025,667.977777777778"
       },
       {
         "id": "00dbbd7f-141c-4f87-a0a3-e6532f7b9f1c",
-        "position": "1848.3,190.7"
+        "position": "1848.3,254.677777777778"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2504",
-    "gridPadding": "0,4"
+    "canvasSize": "3840,2567.97777777778",
+    "gridPadding": "0,5.47777777777767"
   },
   "parameters": [],
   "locals": {
