@@ -1,6 +1,8 @@
 {
   "name": "behaviors_borecky_jan",
   "trees": [
+    "individual\\find_nearby_cover.bt",
+    "individual\\find_nearby_cover2.bt",
     "individual\\kill_minotaurus_advanced.bt",
     "individual\\kill_minotaurus_basic.bt",
     "individual\\move_to_target.bt",

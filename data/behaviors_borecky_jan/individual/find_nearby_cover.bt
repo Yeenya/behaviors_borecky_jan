@@ -1,0 +1,279 @@
+{
+  "name": "Root",
+  "id": "bce1cc12-bd16-44e3-9e5f-c14f8ad14e0b",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Main",
+      "id": "928c721e-ce15-4fb7-83d9-50211f5638bd",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Search for Enemies",
+          "id": "7edf174c-9ba7-433e-b3fa-83681f8d6c62",
+          "type": "scriptAction",
+          "script": [
+            "for i, entity in ipairs(",
+            "    GetEntitiesInArea(",
+            "        Circle(",
+            "            self:GetPosition(),",
+            "            1000),",
+            "        {",
+            "            enemyOf = self ",
+            "        }",
+            "    ) ",
+            ") do",
+            "    table.insert(loc.enemies, entity)",
+            "end"
+          ]
+        },
+        {
+          "name": "Find Cover",
+          "id": "4c81e1fe-0785-4fcb-aa6d-d14da8f48a63",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Get Covers",
+              "id": "1e4a2251-5ad8-42f5-986a-49edf4d68802",
+              "type": "scriptAction",
+              "script": [
+                "local threats = {}",
+                "for i, enemy in ipairs(loc.enemies) do",
+                "    table.insert(",
+                "        threats, ",
+                "        { ",
+                "            area = Circle(enemy:GetPosition(), 2),",
+                "            avoidance = 10",
+                "        }",
+                "    )",
+                "end",
+                "",
+                "self:SetThreats(threats)",
+                "",
+                "local params = {",
+                "    weights = { ",
+                "        --protection = 0.75,",
+                "        lineOfFire = 0 ",
+                "    } ",
+                "}",
+                "",
+                "loc.coversQuery = FindCovers( ",
+                "    self:GetThreats(), ",
+                "    Circle(self:GetPosition(), loc.searchRadius),",
+                "    { self:GetPosition() },",
+                "    params",
+                ")"
+              ]
+            },
+            {
+              "name": "Stance and Move",
+              "id": "83a1310e-acc0-46ef-852d-8829abfca8e1",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Stance",
+                  "id": "cce46f50-e275-4b55-86df-b4a75e6d9f1a",
+                  "type": "setStance",
+                  "stance": [
+                    "loc.covers[1].stance"
+                  ]
+                },
+                {
+                  "name": "Move",
+                  "id": "732033a6-8190-4b6a-be2d-6339347dc21a",
+                  "type": "move",
+                  "position": [
+                    "loc.covers[1].position"
+                  ]
+                },
+                {
+                  "name": "Query Path",
+                  "id": "016bcd5d-49c3-43e0-9348-976feccc4391",
+                  "type": "scriptAction",
+                  "script": [
+                    "loc.pathQuery = FindPath(self:GetPosition(), loc.covers[1].position)"
+                  ]
+                },
+                {
+                  "name": "Wait For Result",
+                  "id": "ba057b78-dc76-41b3-b3a5-055d6ff5c384",
+                  "type": "waitUntil",
+                  "condition": [
+                    "local isReady = loc.pathQuery:IsReady()",
+                    "if isReady then",
+                    "loc.path = loc.pathQuery:Value()",
+                    "loc.pathQuery = nil",
+                    "end",
+                    "return isReady"
+                  ]
+                },
+                {
+                  "name": "Head To Target",
+                  "id": "e5ddb9a3-8018-45f9-9180-9155edc1ffb1",
+                  "type": "scriptAction",
+                  "script": [
+                    "self:ReqHeadingAimAtEntity(loc.enemies[1])"
+                  ]
+                },
+                {
+                  "name": "Reset Covers",
+                  "id": "f485c85b-33df-4423-9966-a7e32c36f0c6",
+                  "type": "scriptAction",
+                  "script": [
+                    "loc.covers = nil"
+                  ]
+                },
+                {
+                  "name": "Reset Enemies",
+                  "id": "960bf13b-b166-4f35-aeb4-742a220666a8",
+                  "type": "scriptAction",
+                  "script": [
+                    "loc.enemies = {}"
+                  ]
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "42651e9f-2148-4984-b55f-8c8571e0fc88",
+                  "type": "waitUntil",
+                  "name": "Wait For Covers",
+                  "condition": [
+                    "local isReady = loc.coversQuery:IsReady()",
+                    "if isReady then",
+                    "loc.covers = loc.coversQuery:Value()",
+                    "loc.coversQuery = nil",
+                    "end",
+                    "return isReady"
+                  ]
+                }
+              ]
+            }
+          ],
+          "decorators": [
+            {
+              "id": "7ae3ec46-aa98-4567-aa17-6990b65906e2",
+              "type": "scriptCondition",
+              "name": "Is Enemy Nearby?",
+              "script": [
+                "return loc.enemies[1] ~= nil"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Debug Path",
+      "id": "29cfbade-e35a-47e0-a693-8d5d0ac8a1d1",
+      "type": "scriptAction",
+      "script": [
+        "local function Line(from, to, r, g, b, a)",
+        "    DebugLine(from, to, r, g, b, a)",
+        "end",
+        "",
+        "local function PolylineOnSurface(points, r, g, b, a, offset)",
+        "    if offset == nil then",
+        "        offset = Vec3(0,0,0)",
+        "    end",
+        "    for i = 1, #points do",
+        "\t    points[i] = GetSurfacePosition(points[i]) + offset",
+        "\tend",
+        "    for i = 1, #points-1 do",
+        "\t    Line(points[i], points[i+1], r, g, b, a)",
+        "\tend            ",
+        "end",
+        "",
+        "local path = loc.path",
+        "if path == nil then",
+        "    return",
+        "end",
+        "local offset",
+        "if offset == nil then",
+        "    offset = Vec3(0,0,1.7)",
+        "end",
+        "",
+        "local segmentCount = path:GetSegmentCount()",
+        "local points = {}",
+        "",
+        "for i = 0, segmentCount-1 do",
+        "    points[i+1] = path:GetSegmentStart(i)",
+        "end",
+        "",
+        "points[#points+1] = path:GetSegmentEnd(segmentCount-1)",
+        "PolylineOnSurface(points,0, 1, 1, 1, offset)"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "bce1cc12-bd16-44e3-9e5f-c14f8ad14e0b",
+        "position": "1762.5,152.6"
+      },
+      {
+        "id": "928c721e-ce15-4fb7-83d9-50211f5638bd",
+        "position": "1762.5,290.1"
+      },
+      {
+        "id": "7edf174c-9ba7-433e-b3fa-83681f8d6c62",
+        "position": "1537.5,427.6"
+      },
+      {
+        "id": "4c81e1fe-0785-4fcb-aa6d-d14da8f48a63",
+        "position": "1762.5,427.6"
+      },
+      {
+        "id": "1e4a2251-5ad8-42f5-986a-49edf4d68802",
+        "position": "1537.5,590.099999999999"
+      },
+      {
+        "id": "83a1310e-acc0-46ef-852d-8829abfca8e1",
+        "position": "1762.5,590.099999999999"
+      },
+      {
+        "id": "cce46f50-e275-4b55-86df-b4a75e6d9f1a",
+        "position": "1350,752.599999999999"
+      },
+      {
+        "id": "732033a6-8190-4b6a-be2d-6339347dc21a",
+        "position": "1550,752.599999999999"
+      },
+      {
+        "id": "016bcd5d-49c3-43e0-9348-976feccc4391",
+        "position": "1762.5,752.599999999999"
+      },
+      {
+        "id": "ba057b78-dc76-41b3-b3a5-055d6ff5c384",
+        "position": "1950,752.599999999999"
+      },
+      {
+        "id": "e5ddb9a3-8018-45f9-9180-9155edc1ffb1",
+        "position": "2125,752.599999999999"
+      },
+      {
+        "id": "f485c85b-33df-4423-9966-a7e32c36f0c6",
+        "position": "2337.5,752.599999999999"
+      },
+      {
+        "id": "960bf13b-b166-4f35-aeb4-742a220666a8",
+        "position": "2575,752.599999999999"
+      },
+      {
+        "id": "29cfbade-e35a-47e0-a693-8d5d0ac8a1d1",
+        "position": "1987.5,290.1"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2477.6",
+    "gridPadding": "0,2.60000000000005"
+  },
+  "parameters": [],
+  "locals": {
+    "enemies": "return {}",
+    "covers": "return nil",
+    "coversQuery": "return nil",
+    "searchRadius": "return 100",
+    "pathQuery": "return nil",
+    "path": "return nil"
+  }
+}
