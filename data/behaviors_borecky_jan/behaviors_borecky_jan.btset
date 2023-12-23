@@ -10,6 +10,7 @@
     "individual\\move_to_target.bt",
     "individual\\safe_move.bt",
     "individual\\shoot_closest_enemy.bt",
+    "individual\\shoot_from_cover.bt",
     "individual\\stance_crouched.bt",
     "individual\\stance_prone.bt",
     "individual\\stance_standing.bt",

@@ -125,16 +125,16 @@
         "position": "1762.5,206.15"
       },
       {
+        "id": "bb760fbb-f7b3-4b2c-a677-7f1f7742d10e",
+        "position": "2037.5,543.65"
+      },
+      {
         "id": "1dbc76b2-0d0c-4ec2-96ae-521d12f1bd21",
         "position": "1537.5,481.15"
       },
       {
         "id": "b786049e-473f-4cba-b8e3-2649fb1c563e",
         "position": "1775,481.15"
-      },
-      {
-        "id": "bb760fbb-f7b3-4b2c-a677-7f1f7742d10e",
-        "position": "2037.5,543.65"
       },
       {
         "id": "620c28d7-36eb-429b-8244-e40c06bdca2b",
@@ -180,7 +180,7 @@
         "boxForeground": "#FF000000"
       }
     ],
-    "canvasSize": "3840,2831.15",
+    "canvasSize": "3840,2831.95",
     "gridPadding": "0,6.14999999999978"
   },
   "parameters": [],

@@ -1,0 +1,337 @@
+{
+  "name": "Root",
+  "id": "8dc42c76-3755-4bf2-b93d-33d5f5eec0b5",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Shoot Or Take Cover",
+      "id": "fa19b538-935f-4fee-9b11-b8972f532d7d",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Position And Shoot",
+          "id": "97f36e35-09bf-4431-9d56-331dd95f85bb",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Manage Peek Time",
+              "id": "ffd7bd65-b57b-4f6d-bec9-f4bbfafbd772",
+              "type": "selector",
+              "subtrees": [
+                {
+                  "name": "Start Peeking",
+                  "id": "ebe0163a-bcbf-493f-8d25-6888fb7bb2b8",
+                  "type": "scriptAction",
+                  "decorators": [
+                    {
+                      "id": "c38c7abc-1e1a-4506-9c3f-3ade834044cc",
+                      "type": "scriptCondition",
+                      "name": "Not Started Peeking?",
+                      "script": [
+                        "return peekStartTime == nil"
+                      ]
+                    }
+                  ],
+                  "script": [
+                    "loc.peekStartTime = GetSimulationTime()",
+                    "loc.peekTime = 0"
+                  ]
+                },
+                {
+                  "name": "Update Peek Time",
+                  "id": "457869d5-012b-4c1d-915f-cc05637825d3",
+                  "type": "scriptAction",
+                  "script": [
+                    "loc.peekTime = GetSimulationTime() - loc.peekStartTime"
+                  ]
+                }
+              ],
+              "active": true
+            },
+            {
+              "name": "Shoot Stance",
+              "id": "7598e95e-71fc-47e3-8c7a-f38160d7946e",
+              "type": "setStance",
+              "stance": [
+                "loc.shootStance"
+              ]
+            },
+            {
+              "name": "Move To Shoot Position",
+              "id": "03e4b371-04b9-4717-8645-dfc47287bbff",
+              "type": "move",
+              "position": [
+                "loc.shootPosition"
+              ]
+            },
+            {
+              "name": "Search for Enemies",
+              "id": "51261316-57a9-4308-9b75-9fd2312e7128",
+              "type": "scriptAction",
+              "script": [
+                "for i, entity in ipairs(",
+                "    GetEntitiesInArea(",
+                "        Circle(",
+                "            self:GetPosition(),",
+                "            200),",
+                "        {",
+                "            enemyOf = self ",
+                "        }",
+                "    ) ",
+                ") do",
+                "    table.insert(loc.enemies, entity)",
+                "end"
+              ]
+            },
+            {
+              "name": "Get Closest Enemy And Aim",
+              "id": "225ccd28-2e39-4445-b0c9-f535e85fb082",
+              "type": "scriptAction",
+              "script": [
+                "loc.closestEnemy = loc.enemies[1]",
+                "local closestDistance = self:GetPosition():GetDistance(loc.closestEnemy:GetPosition())",
+                "local selfPosition = self:GetPosition()",
+                "for i, enemy in ipairs(loc.enemies) do",
+                "    local enemyDistance = selfPosition:Distance(enemy:GetPosition())",
+                "    if enemyDistance < closestDistance then",
+                "        loc.closestEnemy = enemy",
+                "        closestDistance = enemyDistance",
+                "    end",
+                "end",
+                "self:ReqHeadingAimAtEntity(loc.closestEnemy)"
+              ]
+            },
+            {
+              "name": "Fire Burst",
+              "id": "1f3ae321-ecf4-406e-85f4-4228026c2e4c",
+              "type": "fire",
+              "decorators": [
+                {
+                  "id": "5b63480d-1f16-4758-a4e2-23923b138c35",
+                  "type": "scriptCondition",
+                  "name": "Do I Have Clear Shot?",
+                  "script": [
+                    "return self:HasClearShot(self:GetPosition():Distance(loc.closestEnemy:GetAimPoint()))"
+                  ]
+                }
+              ],
+              "rounds": [
+                "3"
+              ],
+              "forced": false
+            }
+          ],
+          "decorators": [
+            {
+              "id": "8e7db453-1826-4a34-8393-5cf0660e2b04",
+              "type": "scriptCondition",
+              "name": "Not Shot At?",
+              "script": [
+                "for i, shot in ipairs(self:GetNearEnemyProjectiles()) do",
+                "    return false",
+                "end",
+                "return true"
+              ]
+            },
+            {
+              "id": "3ae38b76-5b36-45a2-bf16-8a96799acdec",
+              "type": "scriptCondition",
+              "name": "Peek For Too Long?",
+              "script": [
+                "return loc.peekTime < 5"
+              ]
+            },
+            {
+              "id": "7a23d3f9-9fbe-4d46-b733-a9a729e90604",
+              "type": "scriptCondition",
+              "name": "No Enemies Nearby?",
+              "script": [
+                "for i, entity in ipairs(",
+                "    GetEntitiesInArea(",
+                "        Circle(",
+                "            self:GetPosition(),",
+                "            200),",
+                "        {",
+                "            enemyOf = self ",
+                "        }",
+                "    ) ",
+                ") do",
+                "    return true",
+                "end",
+                "return false"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Get To Cover",
+          "id": "104beced-57a1-475c-8d21-a17e09d4d1e7",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Cover Stance",
+              "id": "9f546682-7e82-44ba-99da-a20a73b913be",
+              "type": "setStance",
+              "stance": [
+                "return loc.coverStance"
+              ]
+            },
+            {
+              "name": "Move To Cover",
+              "id": "b9ca68d6-f462-4d29-95f9-40f30beff3b4",
+              "type": "move",
+              "position": [
+                "loc.coverPosition"
+              ]
+            },
+            {
+              "name": "Reset Peek Times",
+              "id": "a1669e27-9f63-44ed-951f-8540ee55a6a7",
+              "type": "scriptAction",
+              "script": [
+                "loc.peekTime = nil",
+                "loc.peekStartTime = nil"
+              ]
+            }
+          ]
+        }
+      ],
+      "active": true
+    },
+    {
+      "name": "Reload If Needed",
+      "id": "dbb51fbc-4c13-4783-9c53-685ca50c9d47",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Reload",
+          "id": "2afd8b3e-e30a-41f5-ba9b-27988baaf39f",
+          "type": "reloadWeapon",
+          "decorators": [
+            {
+              "id": "a93a6df3-6271-436e-8948-3e6bd27a4574",
+              "type": "scriptCondition",
+              "name": "Need Reload?",
+              "script": [
+                "return self:GetCurrentMagazine().rounds == 0"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Succeed",
+          "id": "a7993a0e-6bcc-4fe4-bbce-ec273d5a5429",
+          "type": "success"
+        }
+      ],
+      "active": true
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "8dc42c76-3755-4bf2-b93d-33d5f5eec0b5",
+        "position": "1800,217.48"
+      },
+      {
+        "id": "fa19b538-935f-4fee-9b11-b8972f532d7d",
+        "position": "1800,329.98"
+      },
+      {
+        "id": "97f36e35-09bf-4431-9d56-331dd95f85bb",
+        "position": "1625,367.48"
+      },
+      {
+        "id": "ffd7bd65-b57b-4f6d-bec9-f4bbfafbd772",
+        "position": "900,692.48"
+      },
+      {
+        "id": "ebe0163a-bcbf-493f-8d25-6888fb7bb2b8",
+        "position": "900,792.48"
+      },
+      {
+        "id": "457869d5-012b-4c1d-915f-cc05637825d3",
+        "position": "1112.5,792.48"
+      },
+      {
+        "id": "7598e95e-71fc-47e3-8c7a-f38160d7946e",
+        "position": "1100,692.48"
+      },
+      {
+        "id": "03e4b371-04b9-4717-8645-dfc47287bbff",
+        "position": "1300,692.48"
+      },
+      {
+        "id": "51261316-57a9-4308-9b75-9fd2312e7128",
+        "position": "1525,692.48"
+      },
+      {
+        "id": "225ccd28-2e39-4445-b0c9-f535e85fb082",
+        "position": "1725,692.48"
+      },
+      {
+        "id": "1f3ae321-ecf4-406e-85f4-4228026c2e4c",
+        "position": "1975,692.48"
+      },
+      {
+        "id": "104beced-57a1-475c-8d21-a17e09d4d1e7",
+        "position": "1925,429.98"
+      },
+      {
+        "id": "9f546682-7e82-44ba-99da-a20a73b913be",
+        "position": "1925,529.98"
+      },
+      {
+        "id": "b9ca68d6-f462-4d29-95f9-40f30beff3b4",
+        "position": "2125,529.98"
+      },
+      {
+        "id": "a1669e27-9f63-44ed-951f-8540ee55a6a7",
+        "position": "2325,529.98"
+      },
+      {
+        "id": "dbb51fbc-4c13-4783-9c53-685ca50c9d47",
+        "position": "2325,279.98"
+      },
+      {
+        "id": "2afd8b3e-e30a-41f5-ba9b-27988baaf39f",
+        "position": "2325,379.98"
+      },
+      {
+        "id": "a7993a0e-6bcc-4fe4-bbce-ec273d5a5429",
+        "position": "2525,379.98"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2467.48000000001",
+    "gridPadding": "0,4.98000000000002"
+  },
+  "parameters": [
+    {
+      "name": "shootStance",
+      "isOptional": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "shootPosition",
+      "isOptional": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "coverStance",
+      "isOptional": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "coverPosition",
+      "isOptional": false,
+      "defaultValue": ""
+    }
+  ],
+  "locals": {
+    "enemies": "return {}",
+    "peekTime": "return nil",
+    "peekStartTime": "return nil",
+    "closestEnemy": "return nil"
+  }
+}
