@@ -53,7 +53,7 @@
               "id": "7598e95e-71fc-47e3-8c7a-f38160d7946e",
               "type": "setStance",
               "stance": [
-                "loc.shootStance"
+                "arg.shootStance"
               ]
             },
             {
@@ -61,7 +61,7 @@
               "id": "03e4b371-04b9-4717-8645-dfc47287bbff",
               "type": "move",
               "position": [
-                "loc.shootPosition"
+                "arg.shootPosition"
               ]
             },
             {
@@ -102,23 +102,36 @@
               ]
             },
             {
-              "name": "Fire Burst",
-              "id": "1f3ae321-ecf4-406e-85f4-4228026c2e4c",
-              "type": "fire",
-              "decorators": [
+              "name": "Fire Or Do Nothing",
+              "id": "a993bfb1-4efe-4912-be24-ecfc4a616269",
+              "type": "selector",
+              "subtrees": [
                 {
-                  "id": "5b63480d-1f16-4758-a4e2-23923b138c35",
-                  "type": "scriptCondition",
-                  "name": "Do I Have Clear Shot?",
-                  "script": [
-                    "return self:HasClearShot(self:GetPosition():Distance(loc.closestEnemy:GetAimPoint()))"
-                  ]
+                  "name": "Fire Burst",
+                  "id": "1f3ae321-ecf4-406e-85f4-4228026c2e4c",
+                  "type": "fire",
+                  "decorators": [
+                    {
+                      "id": "5b63480d-1f16-4758-a4e2-23923b138c35",
+                      "type": "scriptCondition",
+                      "name": "Do I Have Clear Shot?",
+                      "script": [
+                        "return self:HasClearShot(self:GetPosition():Distance(loc.closestEnemy:GetAimPoint()))"
+                      ]
+                    }
+                  ],
+                  "rounds": [
+                    "3"
+                  ],
+                  "forced": false
+                },
+                {
+                  "name": "Succeed",
+                  "id": "dc05daf6-91db-4ed1-ab81-eef47189c441",
+                  "type": "success"
                 }
               ],
-              "rounds": [
-                "3"
-              ],
-              "forced": false
+              "active": true
             }
           ],
           "decorators": [
@@ -173,7 +186,7 @@
               "id": "9f546682-7e82-44ba-99da-a20a73b913be",
               "type": "setStance",
               "stance": [
-                "return loc.coverStance"
+                "return arg.coverStance"
               ]
             },
             {
@@ -181,7 +194,7 @@
               "id": "b9ca68d6-f462-4d29-95f9-40f30beff3b4",
               "type": "move",
               "position": [
-                "loc.coverPosition"
+                "arg.coverPosition"
               ]
             },
             {
@@ -231,80 +244,88 @@
     "nodesInfo": [
       {
         "id": "8dc42c76-3755-4bf2-b93d-33d5f5eec0b5",
-        "position": "1800,217.48"
+        "position": "1800,292.098222222222"
       },
       {
         "id": "fa19b538-935f-4fee-9b11-b8972f532d7d",
-        "position": "1800,329.98"
+        "position": "1800,417.098222222222"
       },
       {
         "id": "97f36e35-09bf-4431-9d56-331dd95f85bb",
-        "position": "1625,367.48"
+        "position": "1625,454.598222222222"
       },
       {
         "id": "ffd7bd65-b57b-4f6d-bec9-f4bbfafbd772",
-        "position": "900,692.48"
+        "position": "900,804.598222222222"
       },
       {
         "id": "ebe0163a-bcbf-493f-8d25-6888fb7bb2b8",
-        "position": "900,792.48"
+        "position": "900,904.598222222222"
       },
       {
         "id": "457869d5-012b-4c1d-915f-cc05637825d3",
-        "position": "1112.5,792.48"
+        "position": "1112.5,904.598222222222"
       },
       {
         "id": "7598e95e-71fc-47e3-8c7a-f38160d7946e",
-        "position": "1100,692.48"
+        "position": "1100,804.598222222222"
       },
       {
         "id": "03e4b371-04b9-4717-8645-dfc47287bbff",
-        "position": "1300,692.48"
+        "position": "1300,804.598222222222"
       },
       {
         "id": "51261316-57a9-4308-9b75-9fd2312e7128",
-        "position": "1525,692.48"
+        "position": "1525,804.598222222222"
       },
       {
         "id": "225ccd28-2e39-4445-b0c9-f535e85fb082",
-        "position": "1725,692.48"
+        "position": "1725,804.598222222222"
+      },
+      {
+        "id": "a993bfb1-4efe-4912-be24-ecfc4a616269",
+        "position": "1850,704.598222222222"
       },
       {
         "id": "1f3ae321-ecf4-406e-85f4-4228026c2e4c",
-        "position": "1975,692.48"
+        "position": "1975,804.598222222222"
+      },
+      {
+        "id": "dc05daf6-91db-4ed1-ab81-eef47189c441",
+        "position": "2187.5,804.598222222222"
       },
       {
         "id": "104beced-57a1-475c-8d21-a17e09d4d1e7",
-        "position": "1925,429.98"
+        "position": "1925,504.598222222222"
       },
       {
         "id": "9f546682-7e82-44ba-99da-a20a73b913be",
-        "position": "1925,529.98"
+        "position": "1925,604.598222222222"
       },
       {
         "id": "b9ca68d6-f462-4d29-95f9-40f30beff3b4",
-        "position": "2125,529.98"
+        "position": "2125,604.598222222222"
       },
       {
         "id": "a1669e27-9f63-44ed-951f-8540ee55a6a7",
-        "position": "2325,529.98"
+        "position": "2325,604.598222222222"
       },
       {
         "id": "dbb51fbc-4c13-4783-9c53-685ca50c9d47",
-        "position": "2325,279.98"
+        "position": "2325,354.598222222222"
       },
       {
         "id": "2afd8b3e-e30a-41f5-ba9b-27988baaf39f",
-        "position": "2325,379.98"
+        "position": "2325,454.598222222222"
       },
       {
         "id": "a7993a0e-6bcc-4fe4-bbce-ec273d5a5429",
-        "position": "2525,379.98"
+        "position": "2525,454.598222222222"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2467.48000000001",
-    "gridPadding": "0,4.98000000000002"
+    "canvasSize": "3840,2556.99822222223",
+    "gridPadding": "0,4.59822222222215"
   },
   "parameters": [
     {
