@@ -1,6 +1,8 @@
 {
   "name": "behaviors_borecky_jan",
   "trees": [
+    "group\\agressive_safe_move_without_stop.bt",
+    "group\\first_group_behavior.bt",
     "individual\\find_nearby_cover.bt",
     "individual\\find_nearby_cover2.bt",
     "individual\\follow.bt",
@@ -16,7 +18,11 @@
     "individual\\stance_standing.bt",
     "first_behavior.bt"
   ],
-  "initScripts": [],
+  "initScripts": [
+    "group\\Team_Honza.class.lua",
+    "individual\\Individual_Honza.class.lua",
+    "classes.lua"
+  ],
   "parameters": {},
   "capabilities": {},
   "dynamicTargets": []

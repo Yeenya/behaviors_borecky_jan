@@ -1,0 +1,210 @@
+{
+  "name": "Root",
+  "id": "b834c095-3079-4232-9a90-7d07507c5e1d",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Main",
+      "id": "34636bef-8193-4950-b026-350b4e6557ca",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Set Path Or Move",
+          "id": "0babdd16-d924-48b2-8905-186de8a1d94c",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Set Path",
+              "id": "e941ad88-8651-4900-8afd-b60d68299756",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Query Path",
+                  "id": "25fa9c36-356d-40d8-b6bf-ec25f5bd5237",
+                  "type": "scriptAction",
+                  "script": [
+                    "loc.pathQuery = FindPath(",
+                    "    self:GetLeader():GetPosition(),",
+                    "    arg.orderData.position,",
+                    "    {{avoidance = 1}}",
+                    ")"
+                  ]
+                },
+                {
+                  "name": "Set pathSet To True",
+                  "id": "516ce7e1-b2d0-49ed-ba18-b31a6b2bd60e",
+                  "type": "scriptAction",
+                  "decorators": [
+                    {
+                      "id": "f29cc763-edfa-49c8-8473-80344ad4580f",
+                      "type": "waitUntil",
+                      "name": "Wait For Result",
+                      "condition": [
+                        "local isReady = loc.pathQuery:IsReady()",
+                        "if isReady then",
+                        "    loc.path = loc.pathQuery:Value()",
+                        "    loc.pathQuery = nil",
+                        "end",
+                        "return isReady"
+                      ]
+                    }
+                  ],
+                  "script": [
+                    "loc.pathSet = true"
+                  ]
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "8b5ab6f1-bf7b-4ca6-ba47-1fc424177783",
+                  "type": "scriptCondition",
+                  "name": "Is Path Not Set?",
+                  "script": [
+                    "return loc.pathSet == false"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Send Move",
+              "id": "75b96daa-13ab-475d-971b-4671603b08f4",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Send Message",
+                  "id": "c155945c-7e41-4bf0-ad23-e6418bf06c5f",
+                  "type": "scriptAction",
+                  "script": [
+                    "for i = 0, self:GetEntityCount() - 1",
+                    "do ",
+                    "    self:SendMessage(",
+                    "        self:GetEntity(i), ",
+                    "        \"NewOrder\", ",
+                    "        {",
+                    "            orderName = \"Idle\",",
+                    "            unitToFollow = self:GetLeader()",
+                    "        }",
+                    "    )",
+                    "end"
+                  ]
+                },
+                {
+                  "name": "Wait Forever",
+                  "id": "a59375a4-9293-46ab-891d-d0a678e07d0e",
+                  "type": "waitForever"
+                }
+              ]
+            }
+          ],
+          "active": true
+        }
+      ]
+    },
+    {
+      "name": "Debug Path",
+      "id": "70687829-7b5c-412b-abb1-c94a7e0ed938",
+      "type": "scriptAction",
+      "script": [
+        "local function Line(from, to, r, g, b, a)",
+        "    DebugLine(from, to, r, g, b, a)",
+        "end",
+        "",
+        "local function PolylineOnSurface(points, r, g, b, a, offset)",
+        "    if offset == nil then",
+        "        offset = Vec3(0,0,0)",
+        "    end",
+        "    for i = 1, #points do",
+        "\t    points[i] = GetSurfacePosition(points[i]) + offset",
+        "\tend",
+        "    for i = 1, #points-1 do",
+        "\t    Line(points[i], points[i+1], r, g, b, a)",
+        "\tend            ",
+        "end",
+        "",
+        "local path = loc.path",
+        "if path == nil then",
+        "    return",
+        "end",
+        "local offset",
+        "if offset == nil then",
+        "    offset = Vec3(0,0,1)",
+        "end",
+        "",
+        "local segmentCount = path:GetSegmentCount()",
+        "local points = {}",
+        "",
+        "for i = 0, segmentCount-1 do",
+        "    points[i+1] = path:GetSegmentStart(i)",
+        "end",
+        "",
+        "points[#points+1] = path:GetSegmentEnd(segmentCount-1)",
+        "PolylineOnSurface(points,0, 1, 1, 1, offset)"
+      ]
+    }
+  ],
+  "decorators": [
+    {
+      "id": "dbf57872-7fec-4698-9c8a-be9ba36ce798",
+      "type": "loopForever",
+      "name": "Loop"
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "b834c095-3079-4232-9a90-7d07507c5e1d",
+        "position": "1862.5,224.38"
+      },
+      {
+        "id": "34636bef-8193-4950-b026-350b4e6557ca",
+        "position": "1862.5,386.88"
+      },
+      {
+        "id": "0babdd16-d924-48b2-8905-186de8a1d94c",
+        "position": "1862.5,486.88"
+      },
+      {
+        "id": "e941ad88-8651-4900-8afd-b60d68299756",
+        "position": "1662.5,586.88"
+      },
+      {
+        "id": "25fa9c36-356d-40d8-b6bf-ec25f5bd5237",
+        "position": "1467.45,723.38"
+      },
+      {
+        "id": "516ce7e1-b2d0-49ed-ba18-b31a6b2bd60e",
+        "position": "1662.5,724.38"
+      },
+      {
+        "id": "75b96daa-13ab-475d-971b-4671603b08f4",
+        "position": "1862.5,586.88"
+      },
+      {
+        "id": "c155945c-7e41-4bf0-ad23-e6418bf06c5f",
+        "position": "1862.5,686.88"
+      },
+      {
+        "id": "a59375a4-9293-46ab-891d-d0a678e07d0e",
+        "position": "2062.5,686.88"
+      },
+      {
+        "id": "70687829-7b5c-412b-abb1-c94a7e0ed938",
+        "position": "2062.5,336.88"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2611.88",
+    "gridPadding": "0,11.8799999999999"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false
+    }
+  ],
+  "locals": {
+    "path": "return nil",
+    "pathQuery": "return nil",
+    "pathSet": "return false"
+  }
+}
