@@ -1,0 +1,25 @@
+{
+  "name": "Move",
+  "id": "32711a92-9998-402d-a691-8ddfe03ee24c",
+  "type": "move",
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "32711a92-9998-402d-a691-8ddfe03ee24c",
+        "position": "1762.5,250"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "position": [
+    "arg.orderData.position"
+  ],
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false
+    }
+  ],
+  "locals": {}
+}

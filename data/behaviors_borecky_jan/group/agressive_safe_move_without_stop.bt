@@ -58,6 +58,7 @@
                         "local teamPosition = path:Start()",
                         "local MAX_SUPPRESS_PATH_DISTANCE = 800",
                         "local CUT_DISTANCE = 5",
+                        "local observerPosition = arg.orderData.position()",
                         "",
                         "        -- make polygon along path-positions",
                         "        local boundarySideVectorLeft = Vec3(-PATH_WIDTH_HALF,0,0)",
@@ -153,15 +154,25 @@
                   "script": [
                     "for i = 0, self:GetEntityCount() - 1",
                     "do ",
-                    "    self:SendMessage(",
-                    "        self:GetEntity(i), ",
-                    "        \"NewOrder\", ",
-                    "        {",
-                    "            orderName = \"Idle\",",
-                    "            unitToFollow = self:GetLeader(),",
-                    "            pathBoundary = loc.pathBoundary",
-                    "        }",
-                    "    )",
+                    "    if self:GetEntity(i) ~= self:GetLeader()",
+                    "        self:SendMessage(",
+                    "            self:GetEntity(i), ",
+                    "            \"NewOrder\", ",
+                    "            {",
+                    "                orderName = \"FollowLeader\",",
+                    "                unitToFollow = self:GetLeader(),",
+                    "                pathBoundary = loc.pathBoundary",
+                    "            }",
+                    "        )",
+                    "    else",
+                    "        self:SendMessage(",
+                    "            self:GetEntity(i), ",
+                    "            \"NewOrder\", ",
+                    "            {",
+                    "                orderName = \"MoveLeader\",",
+                    "                pathBoundary = loc.pathBoundary",
+                    "            }",
+                    "        )",
                     "end"
                   ]
                 },
@@ -256,11 +267,11 @@
       },
       {
         "id": "25fa9c36-356d-40d8-b6bf-ec25f5bd5237",
-        "position": "1467.45,760.18"
+        "position": "1462.5,773.68"
       },
       {
         "id": "516ce7e1-b2d0-49ed-ba18-b31a6b2bd60e",
-        "position": "1662.5,761.18"
+        "position": "1657.55,774.68"
       },
       {
         "id": "75b96daa-13ab-475d-971b-4671603b08f4",

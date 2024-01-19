@@ -223,7 +223,8 @@
   "parameters": [
     {
       "name": "unitToFollow",
-      "isOptional": false
+      "isOptional": false,
+      "defaultValue": ""
     }
   ],
   "locals": {

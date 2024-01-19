@@ -15,8 +15,8 @@ return {
         behaviors = {
 
             Advance = {tree = 'Default'},
-            Idle = {tree = 'follow_and_fire_no_stop'},
-
+            FollowLeader = {tree = 'follow_and_fire_no_stop'},
+            MoveLeader = {tree = 'move_leader'},
         },
     },
 }

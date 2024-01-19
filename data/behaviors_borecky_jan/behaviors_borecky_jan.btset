@@ -10,6 +10,7 @@
     "individual\\follow_and_fire_no_stop.bt",
     "individual\\kill_minotaurus_advanced.bt",
     "individual\\kill_minotaurus_basic.bt",
+    "individual\\move_leader.bt",
     "individual\\move_to_target.bt",
     "individual\\safe_move.bt",
     "individual\\shoot_closest_enemy.bt",
