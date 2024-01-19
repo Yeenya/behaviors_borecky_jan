@@ -47,6 +47,82 @@
                         "end",
                         "return isReady"
                       ]
+                    },
+                    {
+                      "id": "0758b284-f219-4a48-8e5e-da9dab76c58b",
+                      "type": "scriptAction",
+                      "name": "Set Path Boundary",
+                      "script": [
+                        "local path = loc.path",
+                        "local PATH_WIDTH_HALF = 15",
+                        "local teamPosition = path:Start()",
+                        "local MAX_SUPPRESS_PATH_DISTANCE = 800",
+                        "local CUT_DISTANCE = 5",
+                        "",
+                        "        -- make polygon along path-positions",
+                        "        local boundarySideVectorLeft = Vec3(-PATH_WIDTH_HALF,0,0)",
+                        "        local boundarySideVectorRight = Vec3(PATH_WIDTH_HALF,0,0)",
+                        "        local boundaryEndPointsSideMultiplier = 2",
+                        "        local boundaryEndPointsOffset = Vec3(0,-30,0)",
+                        "",
+                        "        local startPosition = teamPosition",
+                        "        local pathLength = path:Length()",
+                        "        local positions = {}",
+                        "        local startDistance = math.min(CUT_DISTANCE, pathLength)",
+                        "        if pathLength > MAX_SUPPRESS_PATH_DISTANCE then",
+                        "            local shortenedPathStart = pathLength - MAX_SUPPRESS_PATH_DISTANCE",
+                        "            startPosition = path:PositionAlongPath(shortenedPathStart)",
+                        "            startDistance = shortenedPathStart",
+                        "        end",
+                        "        for i=startDistance, pathLength-math.min(2*CUT_DISTANCE, pathLength), 50 do",
+                        "            positions[#positions + 1] = path:PositionAlongPath(i)",
+                        "        end",
+                        "",
+                        "        -- fallback if too short",
+                        "        if #positions < 2 then",
+                        "            positions = {",
+                        "                teamPosition + 20*(observerPosition - teamPosition):Normalized(),",
+                        "                observerPosition,",
+                        "            }",
+                        "        end",
+                        "",
+                        "     -- first point",
+                        "     local movementHeadingVector = (positions[2] - positions[1]):Normalized()",
+                        "        local movementHeading = MathExt.Vec3ToHeading(movementHeadingVector)",
+                        "     local leftBoundaries = {",
+                        "      startPosition + (boundaryEndPointsOffset + boundaryEndPointsSideMultiplier * boundarySideVectorLeft):RotatedAroundZ(movementHeading)",
+                        "     }",
+                        "        local rightBoundaries = {",
+                        "      startPosition + (boundaryEndPointsOffset + boundaryEndPointsSideMultiplier * boundarySideVectorRight):RotatedAroundZ(movementHeading)",
+                        "     }",
+                        "",
+                        "        for i=1, #positions-1 do",
+                        "      local position = positions[i]",
+                        "      local nextPosition = positions[i+1]",
+                        "      movementHeadingVector = (nextPosition - position):Normalized()",
+                        "            movementHeading = MathExt.Vec3ToHeading(movementHeadingVector)",
+                        "",
+                        "            leftBoundaries[#leftBoundaries+1] = position + boundarySideVectorLeft:RotatedAroundZ(movementHeading)",
+                        "            rightBoundaries[#rightBoundaries+1] = position + boundarySideVectorRight:RotatedAroundZ(movementHeading)",
+                        "     end",
+                        "",
+                        "        -- last point",
+                        "     local lastPosition = positions[#positions]",
+                        "     movementHeadingVector = (lastPosition - positions[#positions-1]):Normalized()",
+                        "        movementHeading = MathExt.Vec3ToHeading(movementHeadingVector)",
+                        "        leftBoundaries[#leftBoundaries+1] = lastPosition + (-boundaryEndPointsOffset + boundaryEndPointsSideMultiplier * boundarySideVectorLeft):RotatedAroundZ(movementHeading)",
+                        "        rightBoundaries[#rightBoundaries+1] = lastPosition + (-boundaryEndPointsOffset + boundaryEndPointsSideMultiplier * boundarySideVectorRight):RotatedAroundZ(movementHeading)",
+                        "",
+                        "        local finalBoundary = {}",
+                        "     -- clock-wise",
+                        "        for i=1, #leftBoundaries do",
+                        "            finalBoundary[#finalBoundary + 1] = leftBoundaries[i]",
+                        "        end",
+                        "        for i=#rightBoundaries, 1, -1 do",
+                        "            finalBoundary[#finalBoundary + 1] = rightBoundaries[i]",
+                        "        end",
+                        "        loc.pathBoundary = Polygon(finalBoundary)"
+                      ]
                     }
                   ],
                   "script": [
@@ -82,7 +158,8 @@
                     "        \"NewOrder\", ",
                     "        {",
                     "            orderName = \"Idle\",",
-                    "            unitToFollow = self:GetLeader()",
+                    "            unitToFollow = self:GetLeader(),",
+                    "            pathBoundary = loc.pathBoundary",
                     "        }",
                     "    )",
                     "end"
@@ -140,6 +217,16 @@
         "points[#points+1] = path:GetSegmentEnd(segmentCount-1)",
         "PolylineOnSurface(points,0, 1, 1, 1, offset)"
       ]
+    },
+    {
+      "name": "Debug Boundary",
+      "id": "85969b5a-facc-4b35-a187-a5bb3e3c5299",
+      "type": "scriptAction",
+      "script": [
+        "local draw = ai_core_public.draw",
+        "if loc.pathBoundary then draw.PolygonOnSurface(loc.pathBoundary, 1, 1, 0, 1, Vec3(0, 0, 1))",
+        "end"
+      ]
     }
   ],
   "decorators": [
@@ -153,58 +240,64 @@
     "nodesInfo": [
       {
         "id": "b834c095-3079-4232-9a90-7d07507c5e1d",
-        "position": "1862.5,224.38"
+        "position": "1862.5,261.18"
       },
       {
         "id": "34636bef-8193-4950-b026-350b4e6557ca",
-        "position": "1862.5,386.88"
+        "position": "1862.5,423.68"
       },
       {
         "id": "0babdd16-d924-48b2-8905-186de8a1d94c",
-        "position": "1862.5,486.88"
+        "position": "1862.5,523.68"
       },
       {
         "id": "e941ad88-8651-4900-8afd-b60d68299756",
-        "position": "1662.5,586.88"
+        "position": "1662.5,623.68"
       },
       {
         "id": "25fa9c36-356d-40d8-b6bf-ec25f5bd5237",
-        "position": "1467.45,723.38"
+        "position": "1467.45,760.18"
       },
       {
         "id": "516ce7e1-b2d0-49ed-ba18-b31a6b2bd60e",
-        "position": "1662.5,724.38"
+        "position": "1662.5,761.18"
       },
       {
         "id": "75b96daa-13ab-475d-971b-4671603b08f4",
-        "position": "1862.5,586.88"
+        "position": "1862.5,623.68"
       },
       {
         "id": "c155945c-7e41-4bf0-ad23-e6418bf06c5f",
-        "position": "1862.5,686.88"
+        "position": "1862.5,723.68"
       },
       {
         "id": "a59375a4-9293-46ab-891d-d0a678e07d0e",
-        "position": "2062.5,686.88"
+        "position": "2062.5,723.68"
       },
       {
         "id": "70687829-7b5c-412b-abb1-c94a7e0ed938",
-        "position": "2062.5,336.88"
+        "position": "2062.5,373.68"
+      },
+      {
+        "id": "85969b5a-facc-4b35-a187-a5bb3e3c5299",
+        "position": "2262.5,373.68"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2611.88",
-    "gridPadding": "0,11.8799999999999"
+    "canvasSize": "3840,2648.68",
+    "gridPadding": "0,11.1800000000001"
   },
   "parameters": [
     {
       "name": "orderData",
-      "isOptional": false
+      "isOptional": false,
+      "defaultValue": ""
     }
   ],
   "locals": {
     "path": "return nil",
     "pathQuery": "return nil",
-    "pathSet": "return false"
+    "pathSet": "return false",
+    "pathBoundary": "return nil"
   }
 }
