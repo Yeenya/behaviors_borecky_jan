@@ -1,0 +1,91 @@
+{
+  "name": "Root",
+  "id": "7f8106df-c5df-4eeb-916d-fa39e4db66ff",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Set Leader",
+      "id": "b3f02915-d57b-4d3e-9a9d-adb490cb85c3",
+      "type": "scriptAction",
+      "script": [
+        "loc.leaderPosition = arg.orderData.unitToFollow:GetPosition()"
+      ]
+    },
+    {
+      "name": "Look And Follow",
+      "id": "93e5007f-847d-4267-a3af-676b289e12ee",
+      "type": "parallel",
+      "subtrees": [
+        {
+          "name": "Follow Leader With Offset",
+          "id": "9c41f2f5-a00a-42c7-af05-7ac4d0a70d3e",
+          "type": "followEntityWithOffset",
+          "entity": [
+            "arg.orderData.unitToFollow"
+          ],
+          "offset": [
+            "return -3 * arg.orderData.unitToFollow:GetVectorForward() + ",
+            "(arg.orderData.unitOrder * 2 * arg.orderData.unitToFollow:GetVectorRight())"
+          ],
+          "boundaries": [
+            "arg.orderData.pathBoundary"
+          ]
+        }
+      ],
+      "waitForAll": false
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Look At Leader",
+      "id": "d4857884-ab1a-4572-a6fd-e8815f3d397b",
+      "type": "headLookAtPosition",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "d4857884-ab1a-4572-a6fd-e8815f3d397b",
+            "position": "1750,372.1"
+          }
+        ],
+        "editorObjects": []
+      },
+      "position": [
+        "loc.leaderPosition"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "7f8106df-c5df-4eeb-916d-fa39e4db66ff",
+        "position": "1750,172.1"
+      },
+      {
+        "id": "b3f02915-d57b-4d3e-9a9d-adb490cb85c3",
+        "position": "1550,272.1"
+      },
+      {
+        "id": "93e5007f-847d-4267-a3af-676b289e12ee",
+        "position": "1900,272.1"
+      },
+      {
+        "id": "9c41f2f5-a00a-42c7-af05-7ac4d0a70d3e",
+        "position": "2062.5,372.1"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2609.6",
+    "gridPadding": "0,9.60000000000002"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": ""
+    }
+  ],
+  "locals": {
+    "enemy": "return nil",
+    "leaderPosition": "return nil"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "name": "Root",
+  "id": "5791354b-9d3c-44b1-a792-8a6ebf46d752",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Set Local Position To Go",
+      "id": "b650c1d6-fee2-4305-8827-2c925891ac08",
+      "type": "scriptAction",
+      "script": [
+        "loc.currentPositionToGo = arg.orderData.path:PositionAlongPath(arg.orderData.distanceSoFar + 10)"
+      ]
+    },
+    {
+      "name": "Move And Look",
+      "id": "536af3de-ccd5-479d-8c7d-0a5ab5b885b9",
+      "type": "parallel",
+      "subtrees": [
+        {
+          "name": "Move",
+          "id": "08bae5e9-d011-4932-b191-23d9624ad749",
+          "type": "move",
+          "position": [
+            "loc.currentPositionToGo"
+          ],
+          "boundaries": [
+            "arg.orderData.pathBoundary"
+          ]
+        }
+      ],
+      "waitForAll": false
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Look Where I Go",
+      "id": "2d085b8e-f004-41ff-b7b3-4a6ec80fafdf",
+      "type": "headLookAtPosition",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "2d085b8e-f004-41ff-b7b3-4a6ec80fafdf",
+            "position": "1775,350"
+          }
+        ],
+        "editorObjects": []
+      },
+      "position": [
+        "loc.currentPositionToGo"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "5791354b-9d3c-44b1-a792-8a6ebf46d752",
+        "position": "1775,137.5"
+      },
+      {
+        "id": "b650c1d6-fee2-4305-8827-2c925891ac08",
+        "position": "1550,250"
+      },
+      {
+        "id": "536af3de-ccd5-479d-8c7d-0a5ab5b885b9",
+        "position": "1925,250"
+      },
+      {
+        "id": "08bae5e9-d011-4932-b191-23d9624ad749",
+        "position": "2087.5,350"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false
+    }
+  ],
+  "locals": {
+    "currentPositionToGo": "return nil"
+  }
+}

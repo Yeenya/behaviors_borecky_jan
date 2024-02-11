@@ -1,25 +1,111 @@
 {
-  "name": "Move",
-  "id": "32711a92-9998-402d-a691-8ddfe03ee24c",
-  "type": "move",
+  "name": "Root",
+  "id": "0dc8d562-2353-4ce8-9f6e-7b51a6b74c0c",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Set Local Position To Go",
+      "id": "2790b3bd-aaa0-44f5-b868-2c43d08ebd9d",
+      "type": "scriptAction",
+      "script": [
+        "if arg.orderData.distanceSoFar ~= nil then",
+        "    loc.metersMoved = arg.orderData.distanceSoFar",
+        "end",
+        "loc.currentPositionToGo = arg.orderData.path:PositionAlongPath(loc.metersMoved)"
+      ]
+    },
+    {
+      "name": "Move And Look",
+      "id": "c74e0f76-4bf4-4149-978f-8077a9cf7c10",
+      "type": "parallel",
+      "subtrees": [
+        {
+          "name": "Move 10 Meters",
+          "id": "32711a92-9998-402d-a691-8ddfe03ee24c",
+          "type": "move",
+          "decorators": [
+            {
+              "id": "14b129ae-0438-421a-9fe7-c74a97c5fc85",
+              "type": "loopForever",
+              "name": "Loop"
+            },
+            {
+              "id": "314d4f46-a5a1-44b9-aaa4-b61246942657",
+              "type": "restartIf",
+              "name": "If Far Enough Change Curr Pos",
+              "script": [
+                "if self:GetPosition():Distance(loc.currentPositionToGo) <= 5 then ",
+                "    loc.metersMoved = loc.metersMoved + 10",
+                "    loc.currentPositionToGo = arg.orderData.path:PositionAlongPath(loc.metersMoved)",
+                "    --DebugLog(\"Incremented\")",
+                "    return true",
+                "end",
+                "return false"
+              ]
+            }
+          ],
+          "position": [
+            "loc.currentPositionToGo"
+          ],
+          "boundaries": [
+            "arg.orderData.pathBoundary"
+          ]
+        }
+      ],
+      "waitForAll": false
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Look Where I Go",
+      "id": "4ddec881-e1f9-4c1e-9836-627029928046",
+      "type": "headLookAtPosition",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "4ddec881-e1f9-4c1e-9836-627029928046",
+            "position": "2137.5,461.2"
+          }
+        ],
+        "editorObjects": []
+      },
+      "position": [
+        "loc.currentPositionToGo"
+      ]
+    }
+  ],
   "meta": {
     "nodesInfo": [
       {
+        "id": "0dc8d562-2353-4ce8-9f6e-7b51a6b74c0c",
+        "position": "1887.5,248.7"
+      },
+      {
+        "id": "2790b3bd-aaa0-44f5-b868-2c43d08ebd9d",
+        "position": "1662.5,361.2"
+      },
+      {
+        "id": "c74e0f76-4bf4-4149-978f-8077a9cf7c10",
+        "position": "1887.5,361.2"
+      },
+      {
         "id": "32711a92-9998-402d-a691-8ddfe03ee24c",
-        "position": "1762.5,250"
+        "position": "1862.5,461.2"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2400"
+    "canvasSize": "3840,2611.2",
+    "gridPadding": "0,11.2"
   },
-  "position": [
-    "arg.orderData.position"
-  ],
   "parameters": [
     {
       "name": "orderData",
-      "isOptional": false
+      "isOptional": false,
+      "defaultValue": ""
     }
   ],
-  "locals": {}
+  "locals": {
+    "metersMoved": "return 0",
+    "currentPositionToGo": "return nil"
+  }
 }

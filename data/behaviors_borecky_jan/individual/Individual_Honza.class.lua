@@ -13,10 +13,11 @@ return {
         end,
 
         behaviors = {
-
-            Advance = {tree = 'Default'},
-            FollowLeader = {tree = 'follow_and_fire_no_stop'},
+            Idle = {tree = 'Default'},
+            FollowLeader = {tree = 'follow_leader'},
             MoveLeader = {tree = 'move_leader'},
+            CoverFire = {tree = 'cover_fire'},
+            Advance = {tree = 'advance'}
         },
     },
 }

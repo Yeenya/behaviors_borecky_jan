@@ -13,10 +13,8 @@ return {
         end,
 
         behaviors = {
-
-            Advance = {tree = 'Default'},
-            Idle = {tree = 'agressive_safe_move_without_stop'},
-
+            Idle = {tree = 'Default'},
+            Move = {tree = 'agressive_safe_move_without_stop'},
         },
     },
 }

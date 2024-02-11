@@ -153,9 +153,9 @@
       "type": "scriptAction",
       "script": [
         "if arg.unitToFollow ~= nil then",
-        "    DebugLog(\"I have my friend! I'm following him.\")",
+        "    --DebugLog(\"I have my friend! I'm following him.\")",
         "else",
-        "    DebugLog(\"I don't have any friends. :(\")",
+        "    --DebugLog(\"I don't have any friends. :(\")",
         "end"
       ]
     }

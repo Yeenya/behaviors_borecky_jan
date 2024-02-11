@@ -116,4 +116,52 @@ class CfgAvailableBehaviors
 			};
 		};
 	};
+
+	class borecky_team_aggressive_safe_move_without_stop
+	{
+		icon = "\vbs2\customer\plugins\behaviors_borecky_jan\data\borecky_jan_t_agg_safe_move_wo_stop.paa";
+		allowRotate = true;
+
+		identity = "generic_team";
+		displayname = "Borecky T Agg Safe Move W/O Stop";
+		description = "Borecky team aggressive safe move without stop";				
+
+		//displayCondition = "\core\addons\plugins\generic_behaviors_public\data\scripts\waypointDisplayCondition.sqf";
+
+		newOrderSubject = "NewOrder";
+		
+		class RootBehaviors
+		{
+			group[] = {"ai_core_public", "genericRoot"};
+			entity[] = {"ai_core_public", "genericRoot"};
+		};
+		
+		class Parameters
+		{
+			class orderName
+			{
+				displayName = "orderName";
+				value = "Move";
+				type = "string";
+			}
+			class orderParameters
+			{
+				displayName = "orderParameters";
+				value = "";
+				type = "table";
+			};
+			class reportCompletedToExternal
+			{
+				displayName = "reportCompletedToExternal";
+				value = "true";
+				type = "boolean";
+			};
+			class debugEnabled
+			{
+				displayName = "debugEnabled";
+				value = "false";
+				type = "boolean";
+			};
+		};
+	};
 };

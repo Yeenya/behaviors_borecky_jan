@@ -1,0 +1,137 @@
+{
+  "name": "Root",
+  "id": "2bf8c80e-82bb-4569-a8b8-26d9dc009f77",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Aim At Enemy",
+      "id": "cc46ca62-2fa3-4d8c-8785-b35ec8d40f3f",
+      "type": "scriptAction",
+      "script": [
+        "self:ReqHeadingAimAtEntity(arg.orderData.enemy)"
+      ]
+    },
+    {
+      "name": "Reload If Needed",
+      "id": "639d8c8f-ce50-4439-8194-b1f51ea85c3b",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Reload",
+          "id": "592d4431-be80-4ccd-a322-9a37070a8023",
+          "type": "reloadWeapon",
+          "decorators": [
+            {
+              "id": "755fd4d1-b189-48b9-ab31-56607c86fb3a",
+              "type": "scriptCondition",
+              "name": "Need Reload?",
+              "script": [
+                "return self:GetCurrentMagazine().rounds == 0"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Succeed",
+          "id": "86811004-4f81-49ba-b111-6a20daea8ddd",
+          "type": "success"
+        }
+      ],
+      "active": true
+    },
+    {
+      "name": "Fire With Pauses",
+      "id": "833649a7-b363-4c70-b11a-d2ed6e78d139",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Fire",
+          "id": "3723abbb-1983-4684-9fc3-d29183f4b6e4",
+          "type": "fire",
+          "decorators": [
+            {
+              "id": "c350bf05-5484-4657-b17d-4250b2635952",
+              "type": "scriptCondition",
+              "name": "Can I Shoot?",
+              "script": [
+                "if self:AreFriendliesInCone(arg.orderData.enemy, 60, 50) then",
+                "    return false",
+                "else",
+                "    return true",
+                "end"
+              ]
+            }
+          ],
+          "rounds": [
+            "1"
+          ],
+          "forced": false
+        },
+        {
+          "name": "Wait Between Shots",
+          "id": "3f69aa4a-344c-4eee-bab9-1986ae0ac90c",
+          "type": "wait",
+          "time": [
+            "1"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "b238dd37-3a1e-4d09-ba98-a2b788ae9112",
+          "type": "countedLoop",
+          "name": "Five Times",
+          "count": [
+            "5"
+          ]
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "2bf8c80e-82bb-4569-a8b8-26d9dc009f77",
+        "position": "1643.6,278.4"
+      },
+      {
+        "id": "cc46ca62-2fa3-4d8c-8785-b35ec8d40f3f",
+        "position": "1450,387.5"
+      },
+      {
+        "id": "639d8c8f-ce50-4439-8194-b1f51ea85c3b",
+        "position": "1650,387.5"
+      },
+      {
+        "id": "592d4431-be80-4ccd-a322-9a37070a8023",
+        "position": "1650,487.5"
+      },
+      {
+        "id": "86811004-4f81-49ba-b111-6a20daea8ddd",
+        "position": "1850,487.5"
+      },
+      {
+        "id": "833649a7-b363-4c70-b11a-d2ed6e78d139",
+        "position": "2050,387.5"
+      },
+      {
+        "id": "3723abbb-1983-4684-9fc3-d29183f4b6e4",
+        "position": "2050,537.5"
+      },
+      {
+        "id": "3f69aa4a-344c-4eee-bab9-1986ae0ac90c",
+        "position": "2250,537.5"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": ""
+    }
+  ],
+  "locals": {}
+}
