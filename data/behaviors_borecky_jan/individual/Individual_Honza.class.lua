@@ -13,7 +13,7 @@ return {
         end,
 
         behaviors = {
-            Idle = {tree = 'Default'},
+            Idle = {tree = 'stance_standing'},
             FollowLeader = {tree = 'follow_leader'},
             MoveLeader = {tree = 'move_leader'},
             CoverFire = {tree = 'cover_fire'},

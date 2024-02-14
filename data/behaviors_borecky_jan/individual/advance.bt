@@ -26,28 +26,17 @@
           "boundaries": [
             "arg.orderData.pathBoundary"
           ]
+        },
+        {
+          "name": "Look Where I Go",
+          "id": "906f8420-a74a-4669-a5e6-76994c78e8db",
+          "type": "scriptAction",
+          "script": [
+            "self:ReqHeadingRelToMove(0)"
+          ]
         }
       ],
-      "waitForAll": false
-    }
-  ],
-  "unlinked-trees": [
-    {
-      "name": "Look Where I Go",
-      "id": "2d085b8e-f004-41ff-b7b3-4a6ec80fafdf",
-      "type": "headLookAtPosition",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "2d085b8e-f004-41ff-b7b3-4a6ec80fafdf",
-            "position": "1775,350"
-          }
-        ],
-        "editorObjects": []
-      },
-      "position": [
-        "loc.currentPositionToGo"
-      ]
+      "waitForAll": true
     }
   ],
   "meta": {
@@ -66,6 +55,10 @@
       },
       {
         "id": "08bae5e9-d011-4932-b191-23d9624ad749",
+        "position": "1775,350"
+      },
+      {
+        "id": "906f8420-a74a-4669-a5e6-76994c78e8db",
         "position": "2087.5,350"
       }
     ],
@@ -75,7 +68,8 @@
   "parameters": [
     {
       "name": "orderData",
-      "isOptional": false
+      "isOptional": false,
+      "defaultValue": ""
     }
   ],
   "locals": {
