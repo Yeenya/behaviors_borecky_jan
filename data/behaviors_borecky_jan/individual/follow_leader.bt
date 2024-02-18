@@ -4,6 +4,14 @@
   "type": "sequence",
   "subtrees": [
     {
+      "name": "Set Threats",
+      "id": "e009bbd4-6d58-4a68-b08c-4fb35b39a8b7",
+      "type": "scriptAction",
+      "script": [
+        "self:SetThreats(arg.orderData.threats)"
+      ]
+    },
+    {
       "name": "Look And Follow",
       "id": "93e5007f-847d-4267-a3af-676b289e12ee",
       "type": "parallel",
@@ -32,32 +40,15 @@
       "waitForAll": true
     }
   ],
-  "unlinked-trees": [
-    {
-      "name": "Set Threats",
-      "id": "e009bbd4-6d58-4a68-b08c-4fb35b39a8b7",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "e009bbd4-6d58-4a68-b08c-4fb35b39a8b7",
-            "position": "1874.9,642.5"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "self:SetThreats({",
-        "    { avoidance = 3 }",
-        "})"
-      ]
-    }
-  ],
   "meta": {
     "nodesInfo": [
       {
         "id": "7f8106df-c5df-4eeb-916d-fa39e4db66ff",
         "position": "2024.9,530"
+      },
+      {
+        "id": "e009bbd4-6d58-4a68-b08c-4fb35b39a8b7",
+        "position": "1874.9,642.5"
       },
       {
         "id": "93e5007f-847d-4267-a3af-676b289e12ee",
