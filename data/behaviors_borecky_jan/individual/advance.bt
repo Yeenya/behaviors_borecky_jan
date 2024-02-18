@@ -12,28 +12,28 @@
       ]
     },
     {
-      "name": "Move And Look",
-      "id": "536af3de-ccd5-479d-8c7d-0a5ab5b885b9",
-      "type": "parallel",
-      "subtrees": [
-        {
-          "name": "Move",
-          "id": "08bae5e9-d011-4932-b191-23d9624ad749",
-          "type": "move",
-          "position": [
-            "arg.orderData.target"
-          ]
-        },
-        {
-          "name": "Look Where I Go",
-          "id": "906f8420-a74a-4669-a5e6-76994c78e8db",
-          "type": "scriptAction",
-          "script": [
-            "self:ReqHeadingRelToMove(0)"
-          ]
-        }
-      ],
-      "waitForAll": true
+      "name": "Standing Stance",
+      "id": "93979d48-4c56-4f38-9d90-7a8a688e1cf5",
+      "type": "setStance",
+      "stance": [
+        "return Stance.Standing"
+      ]
+    },
+    {
+      "name": "Look Where I Go",
+      "id": "906f8420-a74a-4669-a5e6-76994c78e8db",
+      "type": "scriptAction",
+      "script": [
+        "self:ReqHeadingRelToMove(0)"
+      ]
+    },
+    {
+      "name": "Move",
+      "id": "08bae5e9-d011-4932-b191-23d9624ad749",
+      "type": "move",
+      "position": [
+        "arg.orderData.target"
+      ]
     }
   ],
   "meta": {
@@ -44,19 +44,19 @@
       },
       {
         "id": "8f3e20fc-303e-463a-94fa-ffe447b3b36a",
-        "position": "1625,250"
+        "position": "1475,250"
       },
       {
-        "id": "536af3de-ccd5-479d-8c7d-0a5ab5b885b9",
-        "position": "1925,250"
-      },
-      {
-        "id": "08bae5e9-d011-4932-b191-23d9624ad749",
-        "position": "1775,350"
+        "id": "93979d48-4c56-4f38-9d90-7a8a688e1cf5",
+        "position": "1675,250"
       },
       {
         "id": "906f8420-a74a-4669-a5e6-76994c78e8db",
-        "position": "2087.5,350"
+        "position": "1875,250"
+      },
+      {
+        "id": "08bae5e9-d011-4932-b191-23d9624ad749",
+        "position": "2075,250"
       }
     ],
     "editorObjects": [],

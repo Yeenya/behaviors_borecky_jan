@@ -17,28 +17,28 @@
           ]
         },
         {
-          "name": "Move And Look",
-          "id": "9dc6196d-f7aa-4485-b96d-dc4d16cf7fde",
-          "type": "parallel",
-          "subtrees": [
-            {
-              "name": "Move To Target",
-              "id": "c5b9c700-e79f-4ce3-902e-93e05dd01a85",
-              "type": "move",
-              "position": [
-                "arg.orderData.target"
-              ]
-            },
-            {
-              "name": "Look Where I Go",
-              "id": "023f96d9-5abb-4c1f-bab4-f03c21274bff",
-              "type": "scriptAction",
-              "script": [
-                "self:ReqHeadingRelToMove(0)"
-              ]
-            }
-          ],
-          "waitForAll": true
+          "name": "Standing Stance",
+          "id": "fc52fbe7-8495-418d-908f-ba67ee540632",
+          "type": "setStance",
+          "stance": [
+            "return Stance.Standing"
+          ]
+        },
+        {
+          "name": "Look Where I Go",
+          "id": "023f96d9-5abb-4c1f-bab4-f03c21274bff",
+          "type": "scriptAction",
+          "script": [
+            "self:ReqHeadingRelToMove(0)"
+          ]
+        },
+        {
+          "name": "Move To Target",
+          "id": "c5b9c700-e79f-4ce3-902e-93e05dd01a85",
+          "type": "move",
+          "position": [
+            "arg.orderData.target"
+          ]
         }
       ]
     },
@@ -126,19 +126,19 @@
       },
       {
         "id": "42599e5b-2780-4a08-b767-74169fa573dc",
-        "position": "2100,486"
+        "position": "1700,486"
       },
       {
-        "id": "9dc6196d-f7aa-4485-b96d-dc4d16cf7fde",
-        "position": "2300,486"
-      },
-      {
-        "id": "c5b9c700-e79f-4ce3-902e-93e05dd01a85",
-        "position": "2150,586"
+        "id": "fc52fbe7-8495-418d-908f-ba67ee540632",
+        "position": "1900,486"
       },
       {
         "id": "023f96d9-5abb-4c1f-bab4-f03c21274bff",
-        "position": "2462.5,586"
+        "position": "2100,486"
+      },
+      {
+        "id": "c5b9c700-e79f-4ce3-902e-93e05dd01a85",
+        "position": "2300,486"
       },
       {
         "id": "a7a3127d-79f9-420b-80fa-795d900214f7",

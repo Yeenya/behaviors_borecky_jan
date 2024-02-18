@@ -12,32 +12,32 @@
       ]
     },
     {
-      "name": "Look And Follow",
-      "id": "93e5007f-847d-4267-a3af-676b289e12ee",
-      "type": "parallel",
-      "subtrees": [
-        {
-          "name": "Follow Leader With Offset",
-          "id": "9c41f2f5-a00a-42c7-af05-7ac4d0a70d3e",
-          "type": "followEntityWithOffset",
-          "entity": [
-            "arg.orderData.unitToFollow"
-          ],
-          "offset": [
-            "return (-1 * arg.orderData.unitToFollow:GetVectorForward() + ",
-            "(arg.orderData.unitOrder * 2 * arg.orderData.unitToFollow:GetVectorRight()))"
-          ]
-        },
-        {
-          "name": "Look Where I Go",
-          "id": "a7756a54-1b0a-4f22-8c48-709fa1295594",
-          "type": "scriptAction",
-          "script": [
-            "self:ReqHeadingRelToMove(0)"
-          ]
-        }
+      "name": "Standing Stance",
+      "id": "8c689bac-6ed9-4a6f-bb45-e5f0c592edab",
+      "type": "setStance",
+      "stance": [
+        "return Stance.Standing"
+      ]
+    },
+    {
+      "name": "Look Where I Go",
+      "id": "a7756a54-1b0a-4f22-8c48-709fa1295594",
+      "type": "scriptAction",
+      "script": [
+        "self:ReqHeadingRelToMove(0)"
+      ]
+    },
+    {
+      "name": "Follow Leader With Offset",
+      "id": "9c41f2f5-a00a-42c7-af05-7ac4d0a70d3e",
+      "type": "followEntityWithOffset",
+      "entity": [
+        "arg.orderData.unitToFollow"
       ],
-      "waitForAll": true
+      "offset": [
+        "return (-1 * arg.orderData.unitToFollow:GetVectorForward() + ",
+        "(arg.orderData.unitOrder * 2 * arg.orderData.unitToFollow:GetVectorRight()))"
+      ]
     }
   ],
   "meta": {
@@ -48,19 +48,19 @@
       },
       {
         "id": "e009bbd4-6d58-4a68-b08c-4fb35b39a8b7",
-        "position": "1874.9,642.5"
+        "position": "1724.9,642.5"
       },
       {
-        "id": "93e5007f-847d-4267-a3af-676b289e12ee",
-        "position": "2174.9,642.5"
-      },
-      {
-        "id": "9c41f2f5-a00a-42c7-af05-7ac4d0a70d3e",
-        "position": "1987.4,742.5"
+        "id": "8c689bac-6ed9-4a6f-bb45-e5f0c592edab",
+        "position": "1924.9,642.5"
       },
       {
         "id": "a7756a54-1b0a-4f22-8c48-709fa1295594",
-        "position": "2337.4,742.5"
+        "position": "2124.9,642.5"
+      },
+      {
+        "id": "9c41f2f5-a00a-42c7-af05-7ac4d0a70d3e",
+        "position": "2324.9,642.5"
       }
     ],
     "editorObjects": [],
