@@ -1,94 +1,161 @@
 {
   "name": "Root",
-  "id": "0dc8d562-2353-4ce8-9f6e-7b51a6b74c0c",
-  "type": "sequence",
+  "id": "2d1d8818-17bb-413c-b5a3-420f3811e333",
+  "type": "supervisedParallel",
   "subtrees": [
     {
-      "name": "Set Local Position To Go",
-      "id": "2790b3bd-aaa0-44f5-b868-2c43d08ebd9d",
-      "type": "scriptAction",
-      "script": [
-        "if arg.orderData.distanceSoFar ~= nil then",
-        "    loc.metersMoved = arg.orderData.distanceSoFar",
-        "end",
-        "loc.currentPositionToGo = arg.orderData.path:PositionAlongPath(loc.metersMoved)"
-      ]
-    },
-    {
-      "name": "Move And Look",
-      "id": "c74e0f76-4bf4-4149-978f-8077a9cf7c10",
-      "type": "parallel",
+      "name": "Set and Go",
+      "id": "7d57ef8c-598e-456e-8e0c-d65afe68d0aa",
+      "type": "sequence",
       "subtrees": [
         {
-          "name": "Move 10 Meters",
-          "id": "32711a92-9998-402d-a691-8ddfe03ee24c",
-          "type": "move",
-          "decorators": [
-            {
-              "id": "14b129ae-0438-421a-9fe7-c74a97c5fc85",
-              "type": "loopForever",
-              "name": "Loop"
-            },
-            {
-              "id": "314d4f46-a5a1-44b9-aaa4-b61246942657",
-              "type": "restartIf",
-              "name": "If Far Enough Change Curr Pos",
-              "script": [
-                "if self:GetPosition():Distance(loc.currentPositionToGo) <= 5 then ",
-                "    loc.metersMoved = loc.metersMoved + 10",
-                "    loc.currentPositionToGo = arg.orderData.path:PositionAlongPath(loc.metersMoved)",
-                "    --DebugLog(\"Incremented\")",
-                "    return true",
-                "end",
-                "return false"
-              ]
-            }
-          ],
-          "position": [
-            "loc.currentPositionToGo"
-          ],
-          "boundaries": [
-            "arg.orderData.pathBoundary"
+          "name": "Set Threats",
+          "id": "42599e5b-2780-4a08-b767-74169fa573dc",
+          "type": "scriptAction",
+          "script": [
+            "self:SetThreats(arg.orderData.threats)"
           ]
         },
         {
-          "name": "Look Where I Go",
-          "id": "61e9260e-8f67-4139-af64-da2f97564f3e",
+          "name": "Move And Look",
+          "id": "9dc6196d-f7aa-4485-b96d-dc4d16cf7fde",
+          "type": "parallel",
+          "subtrees": [
+            {
+              "name": "Move To Target",
+              "id": "c5b9c700-e79f-4ce3-902e-93e05dd01a85",
+              "type": "move",
+              "position": [
+                "arg.orderData.target"
+              ]
+            },
+            {
+              "name": "Look Where I Go",
+              "id": "023f96d9-5abb-4c1f-bab4-f03c21274bff",
+              "type": "scriptAction",
+              "script": [
+                "self:ReqHeadingRelToMove(0)"
+              ]
+            }
+          ],
+          "waitForAll": true
+        }
+      ]
+    },
+    {
+      "name": "Debug",
+      "id": "a7a3127d-79f9-420b-80fa-795d900214f7",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Query Path",
+          "id": "94c696f2-0f24-4f97-9f09-a81fc23d3a04",
           "type": "scriptAction",
           "script": [
-            "self:ReqHeadingRelToMove(0)"
+            "loc.pathQuery = self:GetPath()"
+          ]
+        },
+        {
+          "name": "Debug Path",
+          "id": "7effa889-dc12-4dd6-9060-ec6e58456c5b",
+          "type": "scriptAction",
+          "decorators": [
+            {
+              "id": "c5eaec4c-4423-4ec6-88bd-bdbe382265d0",
+              "type": "waitUntil",
+              "name": "Wait For Path",
+              "condition": [
+                "local isReady = loc.pathQuery:IsReady()",
+                "if isReady then",
+                "    loc.path = loc.pathQuery:Value()",
+                "    loc.pathQuery = nil",
+                "end",
+                "return isReady"
+              ]
+            }
+          ],
+          "script": [
+            "local function Line(from, to, r, g, b, a)",
+            "    DebugLine(from, to, r, g, b, a)",
+            "end",
+            "",
+            "local function PolylineOnSurface(points, r, g, b, a, offset)",
+            "    if offset == nil then",
+            "        offset = Vec3(0,0,0)",
+            "    end",
+            "    for i = 1, #points do",
+            "\t    points[i] = GetSurfacePosition(points[i]) + offset",
+            "\tend",
+            "    for i = 1, #points-1 do",
+            "\t    Line(points[i], points[i+1], r, g, b, a)",
+            "\tend            ",
+            "end",
+            "",
+            "local path = loc.path",
+            "if path == nil then",
+            "    return",
+            "end",
+            "local offset",
+            "if offset == nil then",
+            "    offset = Vec3(0,0,1)",
+            "end",
+            "",
+            "local segmentCount = path:GetSegmentCount()",
+            "local points = {}",
+            "",
+            "for i = 0, segmentCount-1 do",
+            "    points[i+1] = path:GetSegmentStart(i)",
+            "end",
+            "",
+            "points[#points+1] = path:GetSegmentEnd(segmentCount-1)",
+            "PolylineOnSurface(points,0, 1, 1, 1, offset)"
           ]
         }
-      ],
-      "waitForAll": true
+      ]
     }
   ],
   "meta": {
     "nodesInfo": [
       {
-        "id": "0dc8d562-2353-4ce8-9f6e-7b51a6b74c0c",
-        "position": "1887.5,248.7"
+        "id": "2d1d8818-17bb-413c-b5a3-420f3811e333",
+        "position": "2300,286"
       },
       {
-        "id": "2790b3bd-aaa0-44f5-b868-2c43d08ebd9d",
-        "position": "1662.5,361.2"
+        "id": "7d57ef8c-598e-456e-8e0c-d65afe68d0aa",
+        "position": "2300,386"
       },
       {
-        "id": "c74e0f76-4bf4-4149-978f-8077a9cf7c10",
-        "position": "1887.5,361.2"
+        "id": "42599e5b-2780-4a08-b767-74169fa573dc",
+        "position": "2100,486"
       },
       {
-        "id": "32711a92-9998-402d-a691-8ddfe03ee24c",
-        "position": "1862.5,461.2"
+        "id": "9dc6196d-f7aa-4485-b96d-dc4d16cf7fde",
+        "position": "2300,486"
       },
       {
-        "id": "61e9260e-8f67-4139-af64-da2f97564f3e",
-        "position": "2137.5,461.2"
+        "id": "c5b9c700-e79f-4ce3-902e-93e05dd01a85",
+        "position": "2150,586"
+      },
+      {
+        "id": "023f96d9-5abb-4c1f-bab4-f03c21274bff",
+        "position": "2462.5,586"
+      },
+      {
+        "id": "a7a3127d-79f9-420b-80fa-795d900214f7",
+        "position": "2500,386"
+      },
+      {
+        "id": "94c696f2-0f24-4f97-9f09-a81fc23d3a04",
+        "position": "2500,486"
+      },
+      {
+        "id": "7effa889-dc12-4dd6-9060-ec6e58456c5b",
+        "position": "2700,486"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2611.2",
-    "gridPadding": "0,11.2"
+    "canvasSize": "3840,3036.00000000001",
+    "gridPadding": "0,11"
   },
   "parameters": [
     {
@@ -98,7 +165,7 @@
     }
   ],
   "locals": {
-    "metersMoved": "return 0",
-    "currentPositionToGo": "return nil"
+    "path": "return nil",
+    "pathQuery": "return nil"
   }
 }

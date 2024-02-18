@@ -4,14 +4,6 @@
   "type": "sequence",
   "subtrees": [
     {
-      "name": "Set Leader",
-      "id": "b3f02915-d57b-4d3e-9a9d-adb490cb85c3",
-      "type": "scriptAction",
-      "script": [
-        "loc.leaderPosition = arg.orderData.unitToFollow:GetPosition()"
-      ]
-    },
-    {
       "name": "Look And Follow",
       "id": "93e5007f-847d-4267-a3af-676b289e12ee",
       "type": "parallel",
@@ -24,11 +16,8 @@
             "arg.orderData.unitToFollow"
           ],
           "offset": [
-            "return -3 * arg.orderData.unitToFollow:GetVectorForward() + ",
-            "(arg.orderData.unitOrder * 2 * arg.orderData.unitToFollow:GetVectorRight())"
-          ],
-          "boundaries": [
-            "arg.orderData.pathBoundary"
+            "return (-1 * arg.orderData.unitToFollow:GetVectorForward() + ",
+            "(arg.orderData.unitOrder * 2 * arg.orderData.unitToFollow:GetVectorRight()))"
           ]
         },
         {
@@ -43,32 +32,49 @@
       "waitForAll": true
     }
   ],
+  "unlinked-trees": [
+    {
+      "name": "Set Threats",
+      "id": "e009bbd4-6d58-4a68-b08c-4fb35b39a8b7",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "e009bbd4-6d58-4a68-b08c-4fb35b39a8b7",
+            "position": "1874.9,642.5"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "self:SetThreats({",
+        "    { avoidance = 3 }",
+        "})"
+      ]
+    }
+  ],
   "meta": {
     "nodesInfo": [
       {
         "id": "7f8106df-c5df-4eeb-916d-fa39e4db66ff",
-        "position": "1750,172.1"
-      },
-      {
-        "id": "b3f02915-d57b-4d3e-9a9d-adb490cb85c3",
-        "position": "1550,272.1"
+        "position": "2024.9,530"
       },
       {
         "id": "93e5007f-847d-4267-a3af-676b289e12ee",
-        "position": "1900,272.1"
+        "position": "2174.9,642.5"
       },
       {
         "id": "9c41f2f5-a00a-42c7-af05-7ac4d0a70d3e",
-        "position": "1712.5,372.1"
+        "position": "1987.4,742.5"
       },
       {
         "id": "a7756a54-1b0a-4f22-8c48-709fa1295594",
-        "position": "2062.5,372.1"
+        "position": "2337.4,742.5"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2609.6",
-    "gridPadding": "0,9.60000000000002"
+    "canvasSize": "3964.9,2980",
+    "gridPadding": "12.3999999999999,5.00000000000005"
   },
   "parameters": [
     {
@@ -77,8 +83,5 @@
       "defaultValue": ""
     }
   ],
-  "locals": {
-    "enemy": "return nil",
-    "leaderPosition": "return nil"
-  }
+  "locals": {}
 }

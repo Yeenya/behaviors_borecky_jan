@@ -4,11 +4,11 @@
   "type": "sequence",
   "subtrees": [
     {
-      "name": "Set Local Position To Go",
-      "id": "b650c1d6-fee2-4305-8827-2c925891ac08",
+      "name": "Set Threats",
+      "id": "8f3e20fc-303e-463a-94fa-ffe447b3b36a",
       "type": "scriptAction",
       "script": [
-        "loc.currentPositionToGo = arg.orderData.path:PositionAlongPath(arg.orderData.distanceSoFar + 10)"
+        "self:SetThreats(arg.orderData.threats)"
       ]
     },
     {
@@ -21,10 +21,7 @@
           "id": "08bae5e9-d011-4932-b191-23d9624ad749",
           "type": "move",
           "position": [
-            "loc.currentPositionToGo"
-          ],
-          "boundaries": [
-            "arg.orderData.pathBoundary"
+            "arg.orderData.target"
           ]
         },
         {
@@ -46,8 +43,8 @@
         "position": "1775,137.5"
       },
       {
-        "id": "b650c1d6-fee2-4305-8827-2c925891ac08",
-        "position": "1550,250"
+        "id": "8f3e20fc-303e-463a-94fa-ffe447b3b36a",
+        "position": "1625,250"
       },
       {
         "id": "536af3de-ccd5-479d-8c7d-0a5ab5b885b9",
@@ -72,7 +69,5 @@
       "defaultValue": ""
     }
   ],
-  "locals": {
-    "currentPositionToGo": "return nil"
-  }
+  "locals": {}
 }

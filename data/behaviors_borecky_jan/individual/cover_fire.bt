@@ -78,12 +78,9 @@
       ],
       "decorators": [
         {
-          "id": "b238dd37-3a1e-4d09-ba98-a2b788ae9112",
-          "type": "countedLoop",
-          "name": "Five Times",
-          "count": [
-            "5"
-          ]
+          "id": "4e022410-96f6-4e0c-ac4c-9f14b29388d2",
+          "type": "loopForever",
+          "name": "Loop"
         }
       ]
     }
